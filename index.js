@@ -6,10 +6,10 @@ const uaparser = require('ua-parser');
 const request = require('superagent');
 const Url = require('url-parse');
 const fs = require('fs');
-
+let debug = 0;
 
 // Use SQLite3 Database
-const db = new Database('public/analytics.sqlite3', { verbose: console.log });
+const db = new Database('public/analytics.sqlite3'); // , { verbose: console.log }
 
 // Create `visits` Table
 let stmt = db.prepare(`CREATE TABLE IF NOT EXISTS visits (
@@ -180,7 +180,7 @@ function parseLogs (logs) {
         delete out.user_agent;
         delete out.bytes_sent;
 
-        console.log(out);
+        if (debug) console.log(out);
 
         insertMany(out);
     });
