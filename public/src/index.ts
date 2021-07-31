@@ -14,7 +14,7 @@ async function load() {
         from: "inline",
         config: {
           serverMode: "full",
-          url: "example.sqlite3",
+          url: "http://localhost:5001/analytics.sqlite3",
           requestChunkSize: 4096,
         },
       },
@@ -23,7 +23,7 @@ async function load() {
     wasmUrl.toString()
   );
 
-  const result = await worker.db.query(`select * from mytable`);
+  const result = await worker.db.query(`select * from visits`);
 
   document.body.textContent = JSON.stringify(result);
 }
