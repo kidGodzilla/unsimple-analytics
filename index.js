@@ -118,10 +118,10 @@ function parseLogs (logs) {
 
             if (format[i] === 'timestamp') {
                 // 1627763119345
-                let ts = parseInt(part);
+                let ts = parseInt(part / 1000);
                 out[format[i]] = ts;
 
-                let d = new Date(ts);
+                let d = new Date(parseInt(part));
                 let iso_date = d.toISOString().slice(0,10);
                 out.iso_date = iso_date;
                 // console.log(iso_date);
