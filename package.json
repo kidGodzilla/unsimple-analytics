@@ -1,0 +1,30 @@
+{
+  "name": "unsimple-analytics",
+  "version": "0.2.7",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kidGodzilla/unsimple-analytics.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kidGodzilla/unsimple-analytics/issues"
+  },
+  "homepage": "https://github.com/kidGodzilla/unsimple-analytics#readme",
+  "dependencies": {
+    "better-sqlite3": "^7.4.3",
+    "express": "^4.17.1",
+    "fs": "^0.0.1-security",
+    "mobile-detect": "^1.4.5",
+    "node-log-dissector": "^2.0.0",
+    "ua-parser": "^0.3.5",
+    "url-parse": "^1.5.3",
+    "useragent": "^2.3.0"
+  }
+}
