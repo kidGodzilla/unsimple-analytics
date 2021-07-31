@@ -6,7 +6,7 @@ const fs = require('fs');
 
 
 // Use SQLite3 Database
-const db = new Database('analytics.sqlite3', { verbose: console.log });
+const db = new Database('public/analytics.sqlite3', { verbose: console.log });
 
 // Create `visits` Table
 let stmt = db.prepare(`CREATE TABLE IF NOT EXISTS visits (
