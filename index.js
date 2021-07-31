@@ -1,6 +1,9 @@
+require('dotenv').config();
+
 const MobileDetect = require('mobile-detect');
 const Database = require('better-sqlite3');
 const uaparser = require('ua-parser');
+const request = require('superagent');
 const Url = require('url-parse');
 const fs = require('fs');
 
@@ -73,9 +76,6 @@ const insertMany = db.transaction(rows => {
     }
 });
 
-// Read Test data from local log file
-const logs = fs.readFileSync('./478037.log', { flags: 'r', encoding: 'utf-8', autoClose: true });
-
 // Data format descriptor
 let format = 'cache_status|status_code|timestamp|bytes_sent|pull_zone_id|remote_ip|referer_url|url|edge_location|user_agent|unique_request_id|country_code'.split('|');
 
@@ -117,7 +117,6 @@ function parseLogs (logs) {
             out[format[i]] = part === '-' ? null : part;
 
             if (format[i] === 'timestamp') {
-                // 1627763119345
                 let ts = parseInt(part / 1000);
                 out[format[i]] = ts;
 
@@ -187,4 +186,21 @@ function parseLogs (logs) {
     });
 }
 
-parseLogs(logs);
+// Read Test data from local log file
+// const logs = fs.readFileSync('./478037.log', { flags: 'r', encoding: 'utf-8', autoClose: true });
+// Parse the example logs
+// parseLogs(logs);
+
+// Fetch today's logs from Bunny CDN
+let D = new Date();
+let iso_date = `${ D.toISOString().slice(5, 10) }-${ D.toISOString().slice(2, 4) }`;
+
+if (process.env.PULL_ZONE_ID && process.env.ACCESS_KEY && iso_date) {
+    request.get(`https://logging.bunnycdn.com/${ iso_date }/${ process.env.PULL_ZONE_ID }.log`)
+        .set('AccessKey', process.env.ACCESS_KEY)
+        .set('accept', 'json')
+        .end((err, res) => {
+            // console.log(res.text);
+            parseLogs(res.text);
+        });
+}
