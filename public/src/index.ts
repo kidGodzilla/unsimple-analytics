@@ -25,7 +25,8 @@ async function load() {
 
   const result = await worker.db.query(`select * from visits`);
 
-  document.body.textContent = JSON.stringify(result);
+  // @ts-ignore
+  document.querySelector('div pre').textContent = JSON.stringify(result, null, 2);
 }
 
 load();
