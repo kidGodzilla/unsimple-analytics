@@ -25,6 +25,9 @@ async function load() {
   function $(selector) {
     return document.querySelector(selector) || {}
   }
+  function capitalize(s) {
+    return s.charAt(0).toUpperCase() + s.slice(1)
+  }
 
   function tableFragment(o, keyFormatter = s => s, valueFormatter = s => s) {
     let fragment = '', max = 0, lines = [];
@@ -66,7 +69,8 @@ async function load() {
   }
 
   async function render(start, end) {
-    let host = new URLSearchParams(window.location.search).get('host') || 'unsimple.b-cdn.net';
+    let host = new URLSearchParams(window.location.search).get('host') || 'analytics.serv.rs' || 'unsimple.b-cdn.net';
+    $('h5.name').textContent = capitalize(host);
 
     let statement = `SELECT * FROM visits WHERE host = '${ host }' AND date BETWEEN '${ isoDate(start) }' AND '${ isoDate(end) }'`;
     let hourly = Math.floor(start / 10000) === Math.floor(end / 10000);
@@ -218,7 +222,7 @@ async function load() {
   }
 
   // Start by rendering yesterday's data
-  render(daysAgo(1), daysAgo(1));
+  render(daysAgo(0), daysAgo(0));
 
   // @ts-ignore
   window.daysAgo = daysAgo;
