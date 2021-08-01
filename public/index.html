@@ -62,9 +62,10 @@
         <div class="col-md-6">
             <ul class="nav nav-pills mb-1">
                 <li class="nav-item dropdown ms-auto">
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button">Latest</a>
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button">Yesterday</a>
                     <div class="dropdown-menu" style="">
-                        <a class="dropdown-item" href="#" onclick="render(daysAgo(1), daysAgo(1)); $('.dropdown-toggle').text(this.textContent)">Latest</a>
+                        <a class="dropdown-item" href="#" onclick="render(daysAgo(0), daysAgo(0)); $('.dropdown-toggle').text(this.textContent)">Latest</a>
+                        <a class="dropdown-item" href="#" onclick="render(daysAgo(1), daysAgo(1)); $('.dropdown-toggle').text(this.textContent)">Yesterday</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="#" onclick="render(daysAgo(7), daysAgo(0)); $('.dropdown-toggle').text(this.textContent)">Last 7 Days</a>
                         <a class="dropdown-item" href="#" onclick="render(daysAgo(30), daysAgo(0)); $('.dropdown-toggle').text(this.textContent)">Last 30 Days</a>
