@@ -12,11 +12,11 @@ let debug = 0;
 const db = new Database('public/analytics.sqlite3'); // , { verbose: console.log }
 
 // Drop previous `visits` table
-// let stmt = db.prepare(`DROP TABLE visits`);
+let stmt = db.prepare(`DROP TABLE visits`);
 // stmt.run();
 
 // Optional Recommended Improvements
-let stmt = db.prepare(`pragma journal_mode = delete;`);
+stmt = db.prepare(`pragma journal_mode = delete;`);
 stmt.run();
 
 stmt = db.prepare(`pragma page_size = 1024;`);
@@ -38,11 +38,15 @@ stmt = db.prepare(`CREATE TABLE IF NOT EXISTS visits (
     device_family TEXT,
     browser TEXT,
     browser_major_version TEXT,
+    browser_minor_version TEXT,
     os TEXT,
     os_major_version TEXT,
     os_minor_version TEXT,
     country_code TEXT,
-    referer_host TEXT
+    referer_host TEXT,
+    headless INTEGER,
+    bot INTEGER,
+    width INTEGER
 )`);
 
 stmt.run();
@@ -64,11 +68,15 @@ const insert = db.prepare(`INSERT OR IGNORE INTO visits (
     device_family, 
     browser, 
     browser_major_version, 
+    browser_minor_version, 
     os, 
     os_major_version, 
     os_minor_version, 
     country_code,
-    referer_host
+    referer_host,
+    headless,
+    bot,
+    width
 ) VALUES (
     @unique_request_id, 
     @iso_date,
@@ -81,11 +89,15 @@ const insert = db.prepare(`INSERT OR IGNORE INTO visits (
     @device_family, 
     @browser, 
     @browser_major_version, 
+    @browser_minor_version, 
     @os, 
     @os_major_version, 
     @os_minor_version, 
     @country_code,
-    @referer_host
+    @referer_host,
+    @headless,
+    @bot,
+    @width
 )`);
 
 // Insert one or many function
@@ -134,6 +146,18 @@ function parseLogs (logs) {
 
         if (!parts[7].includes('/o.png')) return;
 
+        // referrer host href width bot headless
+        let parsed = new Url(parts[7], true);
+        if (parsed.query.href) {
+            parsed = new Url(parsed.query.href, true);
+
+            if (parsed.query.headless) out.headless = parseInt(parsed.query.headless);
+            if (parsed.query.width) out.width = parseInt(parsed.query.width);
+            if (parsed.query.referrer) parts[6] = parsed.query.referrer;
+            if (parsed.query.bot) out.bot = parseInt(parsed.query.bot);
+            if (parsed.query.href) parts[7] = parsed.query.href;
+        }
+
         parts.forEach((part, i) => {
             out[format[i]] = part === '-' ? null : part;
 
@@ -155,6 +179,7 @@ function parseLogs (logs) {
                 out.device_family = uaParts.device.family;
                 out.browser = uaParts.family;
                 out.browser_major_version = uaParts.major;
+                out.browser_minor_version = uaParts.minor;
                 out.os = uaParts.os.family;
                 out.os_major_version = uaParts.os.major;
                 out.os_minor_version = uaParts.os.minor;
@@ -163,7 +188,7 @@ function parseLogs (logs) {
             } else if (format[i] === 'referer_url') {
                 if (!part || part === '-') return;
 
-                let parsed = new Url(part, true);
+                parsed = new Url(part, true);
                 // console.log(part, '->', parsed.protocol, parsed.host, parsed.pathname);
 
                 out.referer_protocol = parsed.protocol;
@@ -174,18 +199,18 @@ function parseLogs (logs) {
             } else if (format[i] === 'url') {
                 if (!part || part === '-') return;
 
-                let parsed = new Url(part, true);
-                // console.log(part, '->', parsed.protocol, parsed.host, parsed.pathname);
+                parsed = new Url(part, true);
+                console.log(part, '->', parsed.protocol, parsed.host, parsed.pathname);
 
-                // console.log(parsed);
+                console.log(parsed);
                 // parsed.query.url
 
                 out.protocol = parsed.protocol;
                 out.pathname = parsed.pathname;
                 out.host = parsed.host;
 
-                if (parsed.query.url) {
-                    parsed = new Url(parsed.query.url, true);
+                if (parsed.query.href) {
+                    parsed = new Url(parsed.query.href, true);
 
                     out.protocol = parsed.protocol;
                     out.pathname = parsed.pathname;
@@ -195,6 +220,10 @@ function parseLogs (logs) {
         });
 
         if (!out.referer_host) out.referer_host = '';
+        if (!out.headless) out.headless = 0;
+        if (!out.width) out.width = 0;
+        if (!out.bot) out.bot = 0;
+
         out.status_code = parseInt(out.status_code);
         // delete out.unique_request_id;
         delete out.cache_status;
@@ -222,15 +251,16 @@ const D = new Date();
 // const yesterday = new Date(D);
 // yesterday.setDate(yesterday.getDate() - 1);
 let iso_date = `${ D.toISOString().slice(5, 10) }-${ D.toISOString().slice(2, 4) }`;
+// iso_date = '07-31-21';
 
 if (process.env.PULL_ZONE_ID && process.env.ACCESS_KEY && iso_date) {
-    console.log('Downloading latest log data from Bunny CDN');
+    console.log(`Downloading (${ iso_date }) log data from Bunny CDN`);
 
     request.get(`https://logging.bunnycdn.com/${ iso_date }/${ process.env.PULL_ZONE_ID }.log`)
         .set('AccessKey', process.env.ACCESS_KEY)
         .set('accept', 'json')
         .end((err, res) => {
-            console.log('Parsing today\'s logs & Updating Database');
+            console.log(`Parsing ${ iso_date } logs & Updating Database`);
             parseLogs(res.text);
         });
 }
