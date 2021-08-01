@@ -24,9 +24,16 @@
         .nav-tabs .nav-link { padding-top: 0.5rem; padding-bottom: 0.5rem }
         .spinme { display:block; margin: 0 auto; position: relative; top: 125px }
         .dropdown-menu.show { z-index: 99999 !important; transform: translate3d(-50px, 42px, 0px) !important }
+        .dot { margin-left: 16px; margin-right: 4px; transform-origin: center center; transform: scale(4) translateY(-0.85px) }
 
         .shaded img { max-height: 18px; margin-top: -4px }
         .shaded a { color: #000 }
+
+        @media screen and (max-width: 640px) {
+            .mt-sm-3 { margin-top: 1rem!important }
+            .w-495 { width: 49% !important }
+            .nav-pills { margin-top: -8px }
+        }
     </style>
 </head>
 <body>
@@ -55,13 +62,13 @@
 <div class="container mt-5">
 
     <div class="row">
-        <div class="col-md-6 xoffset-md-1">
+        <div class="col-6 xoffset-md-1">
             <h5 class="d-inline pt-2 mb-0">Website.name</h5>
 
-            <span class="text-success" style="display: inline-block; margin-left: 16px; margin-right: 4px; transform-origin: center center; transform: scale(4) translateY(-0.85px);">·</span>
-            <span class="current-visitors">No current visitors</span>
+            <span class="text-success d-none d-md-inline-block dot">·</span>
+            <span class="current-visitors d-none d-md-block">No current visitors</span>
         </div>
-        <div class="col-md-6">
+        <div class="col-6">
             <ul class="nav nav-pills mb-1">
                 <li class="nav-item dropdown ms-auto">
                     <a class="nav-link dropdown-toggle cp" data-bs-toggle="dropdown" role="button">Yesterday</a>
@@ -83,12 +90,12 @@
                 <div class="card-body">
 
                     <div class="row">
-                        <div class="col-sm-3 xtext-center">
+                        <div class="col-6 col-md-3 xtext-center">
                             <h6 class="card-subtitle mb-2 text-muted">Visitors</h6>
                             <h4 class="card-title visitors"></h4>
                         </div>
 
-                        <div class="col-sm-3 xtext-center">
+                        <div class="col-6 col-md-3 xtext-center">
                             <h6 class="card-subtitle mb-2 text-muted">Total Pageviews</h6>
                             <h4 class="card-title pageviews"></h4>
                         </div>
@@ -117,7 +124,7 @@
             </div>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-6 mt-sm-3">
             <div class="card min-357">
                 <div class="card-body">
                     <h5 class="card-title">Top Pages</h5>
@@ -145,7 +152,7 @@
             </div>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-6 mt-sm-3">
             <div class="card min-357">
                 <div class="card-body">
                     <h5 class="card-title float-left" style="margin-bottom: -37px;">Devices</h5>
