@@ -4,13 +4,16 @@ const workerUrl = new URL("sql.js-httpvfs/dist/sqlite.worker.js", import.meta.ur
 const wasmUrl = new URL("sql.js-httpvfs/dist/sql-wasm.wasm", import.meta.url);
 
 async function load() {
+  let url = (location.hostname === 'localhost' ? `${ location.protocol }//${ location.host }/` : 'https://analytics.serv.rs/') + `analytics.sqlite3`;
+  console.log('url', url);
+
   const worker = await createDbWorker(
     [
       {
         from: "inline",
         config: {
           serverMode: "full",
-          url: (location.hostname === 'localhost' ? `${ location.protocol }//${ location.host }/` : 'https://analytics.serv.rs/') + `analytics.sqlite3`,
+          url: url,
           requestChunkSize: 4096
         }
       }
