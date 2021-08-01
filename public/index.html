@@ -64,16 +64,10 @@
                 <li class="nav-item dropdown ms-auto">
                     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button">Latest</a>
                     <div class="dropdown-menu" style="">
-                        <a class="dropdown-item" href="#">Latest</a>
+                        <a class="dropdown-item" href="#" onclick="render(daysAgo(1), daysAgo(1)); $('.dropdown-toggle').text(this.textContent)">Latest</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Last 7 Days</a>
-                        <a class="dropdown-item" href="#">Last 30 Days</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Month to Date</a>
-                        <a class="dropdown-item" href="#">Last Month</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Last 6 Months</a>
-                        <a class="dropdown-item" href="#">Last 12 Months</a>
+                        <a class="dropdown-item" href="#" onclick="render(daysAgo(7), daysAgo(0)); $('.dropdown-toggle').text(this.textContent)">Last 7 Days</a>
+                        <a class="dropdown-item" href="#" onclick="render(daysAgo(30), daysAgo(0)); $('.dropdown-toggle').text(this.textContent)">Last 30 Days</a>
                     </div>
                 </li>
             </ul>
