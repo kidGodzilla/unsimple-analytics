@@ -10,7 +10,7 @@ async function load() {
         from: "inline",
         config: {
           serverMode: "full",
-          url: (location.hostname === 'localhost' ? `${ location.protocol }//${ location.host }/` : '../') + `analytics.sqlite3`,
+          url: (location.hostname === 'localhost' ? `${ location.protocol }//${ location.host }/` : 'https://analytics.serv.rs/') + `analytics.sqlite3`,
           requestChunkSize: 4096
         }
       }
