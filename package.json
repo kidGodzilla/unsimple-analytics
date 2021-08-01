@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "deploy": "git push dokku main:master",
-    "start": "serve public -l 5001",
+    "start": "serve public -l 5000",
+    "dev": "serve public -l 5001",
     "build": "node ."
   },
   "repository": {
