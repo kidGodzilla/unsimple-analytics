@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "dev": "webpack --mode=development"
+    "dev": "webpack --mode=development",
     "start": "serve -l 5001",
     "build": "webpack"
   },
