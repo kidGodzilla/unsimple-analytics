@@ -11,9 +11,9 @@ async function load() {
         config: {
           serverMode: "full",
           url: "http://localhost:5001/analytics.sqlite3",
-          requestChunkSize: 4096,
-        },
-      },
+          requestChunkSize: 4096
+        }
+      }
     ],
     workerUrl.toString(),
     wasmUrl.toString()
