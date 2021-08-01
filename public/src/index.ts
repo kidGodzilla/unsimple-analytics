@@ -27,7 +27,7 @@ async function load() {
     return document.querySelector(selector) || {}
   }
 
-  function tableFragment(o) {
+  function tableFragment(o, keyFormatter = s => s) {
     let fragment = '', min = 0, max = 0, lines = [];
 
     for (let k in o) {
@@ -47,11 +47,10 @@ async function load() {
 
       fragment += `
 <div class="mb-1">
-    <div class="shaded d-inline-block bg-grey text-nowrap pt-1 pb-1" style="width: ${ (v / max) * 85 }%">&nbsp;${ k }</div>
+    <div class="shaded d-inline-block bg-grey text-nowrap pt-1 pb-1" style="width: ${ (v / max) * 85 }%">&nbsp;${ keyFormatter(k) }</div>
     <span class="float-right text-right pt-1">${ v }</span>
 </div>`;
     });
-
 
     return fragment;
   }
@@ -69,7 +68,6 @@ async function load() {
   $('div pre').textContent = JSON.stringify(result, null, 2);
 
   // Aggregate results
-  let map = {};
   let referrers = {};
   let countries = {};
   let pathnames = {};
@@ -77,6 +75,7 @@ async function load() {
   let visitors = [];
   let browsers = {};
   let types = {};
+  let map = {};
   let os = {};
 
   // console.log(result);
@@ -127,7 +126,7 @@ async function load() {
 
   // console.log(map, data, referrers, browsers, pathnames, os, types, pageviews, visitors.length);
 
-  $('.referrers').innerHTML = tableFragment(referrers);
+  $('.referrers').innerHTML = tableFragment(referrers, s => `<img src="https://logo.clearbit.com/${ s }" onerror="this.onerror=null; this.src='default.png';"> ${ s }`);
   $('.browsers').innerHTML = tableFragment(browsers);
   $('.pages').innerHTML = tableFragment(pathnames);
   $('.devices').innerHTML = tableFragment(types);
