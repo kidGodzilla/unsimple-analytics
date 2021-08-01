@@ -7,13 +7,17 @@ const request = require('superagent');
 const Url = require('url-parse');
 const fs = require('fs');
 let debug = 0;
+let drop = 0;
 
 // Use SQLite3 Database
 const db = new Database('public/analytics.sqlite3'); // , { verbose: console.log }
 
 // Drop previous `visits` table
 let stmt = db.prepare(`DROP TABLE visits`);
-// stmt.run();
+if (drop) {
+    console.log('Dropping previous visits table');
+    stmt.run();
+}
 
 // Optional Recommended Improvements
 stmt = db.prepare(`pragma journal_mode = delete;`);
@@ -153,9 +157,9 @@ function parseLogs (logs) {
 
             if (parsed.query.headless) out.headless = parseInt(parsed.query.headless);
             if (parsed.query.width) out.width = parseInt(parsed.query.width);
-            if (parsed.query.referrer) parts[6] = parsed.query.referrer;
             if (parsed.query.bot) out.bot = parseInt(parsed.query.bot);
             if (parsed.query.href) parts[7] = parsed.query.href;
+            parts[6] = parsed.query.referrer || '';
         }
 
         parts.forEach((part, i) => {
@@ -200,9 +204,9 @@ function parseLogs (logs) {
                 if (!part || part === '-') return;
 
                 parsed = new Url(part, true);
-                console.log(part, '->', parsed.protocol, parsed.host, parsed.pathname);
+                // console.log(part, '->', parsed.protocol, parsed.host, parsed.pathname);
 
-                console.log(parsed);
+                // console.log(parsed);
                 // parsed.query.url
 
                 out.protocol = parsed.protocol;
