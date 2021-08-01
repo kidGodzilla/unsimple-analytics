@@ -10,7 +10,7 @@ async function load() {
         from: "inline",
         config: {
           serverMode: "full",
-          url: "http://localhost:5001/analytics.sqlite3",
+          url: "analytics.sqlite3",
           requestChunkSize: 4096
         }
       }
