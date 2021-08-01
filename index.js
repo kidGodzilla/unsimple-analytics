@@ -153,8 +153,6 @@ function parseLogs (logs) {
         // referrer host href width bot headless
         let parsed = new Url(parts[7], true);
         if (parsed.query.href) {
-            parsed = new Url(parsed.query.href, true);
-
             if (parsed.query.headless) out.headless = parseInt(parsed.query.headless);
             if (parsed.query.width) out.width = parseInt(parsed.query.width);
             if (parsed.query.bot) out.bot = parseInt(parsed.query.bot);
@@ -257,7 +255,7 @@ const D = new Date();
 // const yesterday = new Date(D);
 // yesterday.setDate(yesterday.getDate() - 1);
 let iso_date = `${ D.toISOString().slice(5, 10) }-${ D.toISOString().slice(2, 4) }`;
-// iso_date = '07-31-21';
+if (drop) iso_date = '07-31-21'; // Convenience
 
 if (process.env.PULL_ZONE_ID && process.env.ACCESS_KEY && iso_date) {
     console.log(`Downloading (${ iso_date }) log data from Bunny CDN`);
