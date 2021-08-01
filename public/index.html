@@ -16,7 +16,7 @@
         .w-495 { width: 49.5%!important }
         .text-right { text-align: right !important }
         .float-right { float: right }
-        .bg-grey { background: #1A2C7288 }
+        .bg-grey { background: #1A2C7233 }
 
         .nav-tabs { font-size: 12px }
         .nav-tabs .nav-link {
@@ -24,6 +24,7 @@
             padding-bottom: 0.5rem;
         }
         .dropdown-menu.show { z-index: 99 }
+        .min-357 { min-height: 357px }
     </style>
 </head>
 <body>
@@ -106,13 +107,13 @@
 
     <div class="row mt-3">
         <div class="col-md-6">
-            <div class="card">
+            <div class="card min-357">
                 <div class="card-body">
                     <h5 class="card-title">Top Sources</h5>
                     <small class="text-muted w-495 d-inline-block">Source</small>
                     <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
 
-                    <div class="mt-2">
+                    <div class="mt-2 referrers">
                         <div class="mb-1">
                             <div class="shaded d-inline-block bg-grey text-white pt-1 pb-1" style="width: 85%">&nbsp;Microsoft Bing</div>
                             <span class="float-right text-right pt-1">57</span>
@@ -127,13 +128,13 @@
         </div>
 
         <div class="col-md-6">
-            <div class="card">
+            <div class="card min-357">
                 <div class="card-body">
                     <h5 class="card-title">Top Pages</h5>
                     <small class="text-muted w-495 d-inline-block">Page URL</small>
                     <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
 
-                    <div class="mt-2">
+                    <div class="mt-2 pages">
                         <div class="mb-1">
                             <div class="shaded d-inline-block bg-grey text-white pt-1 pb-1" style="width: 85%">&nbsp;/Sites</div>
                             <span class="float-right text-right pt-1">57</span>
@@ -160,7 +161,7 @@
         </div>
 
         <div class="col-md-6">
-            <div class="card">
+            <div class="card min-357">
                 <div class="card-body">
                     <h5 class="card-title float-left" style="margin-bottom: -37px;">Devices</h5>
 
@@ -182,15 +183,15 @@
                             <small class="text-muted w-495 d-inline-block">Type</small>
                             <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
 
-                            <div class="mt-2">
-                                <div class="mb-1">
-                                    <div class="shaded d-inline-block bg-grey text-white pt-1 pb-1" style="width: 85%">&nbsp;Mobile</div>
-                                    <span class="float-right text-right pt-1">57</span>
-                                </div>
-                                <div class="mb-1">
-                                    <div class="shaded d-inline-block bg-grey text-white pt-1 pb-1" style="width: 70%">&nbsp;Desktop</div>
-                                    <span class="float-right text-right pt-1">44</span>
-                                </div>
+                            <div class="mt-2 devices">
+<!--                                <div class="mb-1">-->
+<!--                                    <div class="shaded d-inline-block bg-grey text-white pt-1 pb-1" style="width: 85%">&nbsp;Mobile</div>-->
+<!--                                    <span class="float-right text-right pt-1">57</span>-->
+<!--                                </div>-->
+<!--                                <div class="mb-1">-->
+<!--                                    <div class="shaded d-inline-block bg-grey text-white pt-1 pb-1" style="width: 70%">&nbsp;Desktop</div>-->
+<!--                                    <span class="float-right text-right pt-1">44</span>-->
+<!--                                </div>-->
                             </div>
                         </div>
 
@@ -198,15 +199,15 @@
                             <small class="text-muted w-495 d-inline-block">Browser</small>
                             <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
 
-                            <div class="mt-2">
-                                <div class="mb-1">
-                                    <div class="shaded d-inline-block bg-grey text-white pt-1 pb-1" style="width: 85%">&nbsp;Netscape Navigator</div>
-                                    <span class="float-right text-right pt-1">57</span>
-                                </div>
-                                <div class="mb-1">
-                                    <div class="shaded d-inline-block bg-grey text-white pt-1 pb-1" style="width: 70%">&nbsp;Internet Exploder</div>
-                                    <span class="float-right text-right pt-1">44</span>
-                                </div>
+                            <div class="mt-2 browsers">
+<!--                                <div class="mb-1">-->
+<!--                                    <div class="shaded d-inline-block bg-grey text-white pt-1 pb-1" style="width: 85%">&nbsp;Netscape Navigator</div>-->
+<!--                                    <span class="float-right text-right pt-1">57</span>-->
+<!--                                </div>-->
+<!--                                <div class="mb-1">-->
+<!--                                    <div class="shaded d-inline-block bg-grey text-white pt-1 pb-1" style="width: 70%">&nbsp;Internet Exploder</div>-->
+<!--                                    <span class="float-right text-right pt-1">44</span>-->
+<!--                                </div>-->
                             </div>
                         </div>
 
@@ -214,15 +215,15 @@
                             <small class="text-muted w-495 d-inline-block">OS</small>
                             <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
 
-                            <div class="mt-2">
-                                <div class="mb-1">
-                                    <div class="shaded d-inline-block bg-grey text-white pt-1 pb-1" style="width: 85%">&nbsp;Windows 3.1</div>
-                                    <span class="float-right text-right pt-1">57</span>
-                                </div>
-                                <div class="mb-1">
-                                    <div class="shaded d-inline-block bg-grey text-white pt-1 pb-1" style="width: 70%">&nbsp;Windows ME</div>
-                                    <span class="float-right text-right pt-1">44</span>
-                                </div>
+                            <div class="mt-2 os">
+<!--                                <div class="mb-1">-->
+<!--                                    <div class="shaded d-inline-block bg-grey text-white pt-1 pb-1" style="width: 85%">&nbsp;Windows 3.1</div>-->
+<!--                                    <span class="float-right text-right pt-1">57</span>-->
+<!--                                </div>-->
+<!--                                <div class="mb-1">-->
+<!--                                    <div class="shaded d-inline-block bg-grey text-white pt-1 pb-1" style="width: 70%">&nbsp;Windows ME</div>-->
+<!--                                    <span class="float-right text-right pt-1">44</span>-->
+<!--                                </div>-->
                             </div>
                         </div>
                     </div>

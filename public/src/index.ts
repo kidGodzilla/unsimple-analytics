@@ -27,6 +27,35 @@ async function load() {
     return document.querySelector(selector) || {}
   }
 
+  function tableFragment(o) {
+    let fragment = '', min = 0, max = 0, lines = [];
+
+    for (let k in o) {
+      let v = o[k];
+      if (max < v) max = v;
+
+      // @ts-ignore
+      lines.push({ k, v });
+    }
+
+    // @ts-ignore
+    lines.sort((b, a) => a.v > b.v && 1 || -1)
+
+    lines.forEach(line => {
+      // @ts-ignore
+      let { v, k } = line;
+
+      fragment += `
+<div class="mb-1">
+    <div class="shaded d-inline-block bg-grey text-nowrap pt-1 pb-1" style="width: ${ (v / max) * 85 }%">&nbsp;${ k }</div>
+    <span class="float-right text-right pt-1">${ v }</span>
+</div>`;
+    });
+
+
+    return fragment;
+  }
+
   const today = new Date();
   const yesterday = new Date(today);
   yesterday.setDate(yesterday.getDate() - 1);
@@ -43,9 +72,12 @@ async function load() {
   let map = {};
   let referrers = {};
   let countries = {};
+  let pathnames = {};
   let pageviews = 0;
   let visitors = [];
+  let browsers = {};
   let types = {};
+  let os = {};
 
   // console.log(result);
 
@@ -67,6 +99,15 @@ async function load() {
     // Device type
     incr(types, item.device_type);
 
+    // OS
+    incr(os, item.os);
+
+    // Browser
+    incr(browsers, item.browser);
+
+    // Pathnames
+    incr(pathnames, item.pathname);
+
     // Countries
     if (!countries[item.country_code]) countries[item.country_code] = { visitors: 0 };
     countries[item.country_code].visitors++;
@@ -84,7 +125,14 @@ async function load() {
     data.push({ hour: `${ yesterday.toISOString().slice(0,10) } ${ i }:00`, value: (map[i] || 0) });
   }
 
-  console.log(map, data, referrers, referrers['']);
+  // console.log(map, data, referrers, browsers, pathnames, os, types, pageviews, visitors.length);
+
+  $('.referrers').innerHTML = tableFragment(referrers);
+  $('.browsers').innerHTML = tableFragment(browsers);
+  $('.pages').innerHTML = tableFragment(pathnames);
+  $('.devices').innerHTML = tableFragment(types);
+  $('.os').innerHTML = tableFragment(os);
+
 
   // @ts-ignore
   new Morris.Line({
