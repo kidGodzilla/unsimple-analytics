@@ -22,6 +22,7 @@
 
         .nav-tabs { font-size: 12px }
         .nav-tabs .nav-link { padding-top: 0.5rem; padding-bottom: 0.5rem }
+        .spinme { display:block; margin: 0 auto; position: relative; top: 125px }
         .dropdown-menu.show { z-index: 99999 !important; transform: translate3d(-50px, 42px, 0px) !important }
 
         .shaded img { max-height: 18px; margin-top: -4px }
@@ -93,7 +94,9 @@
                         </div>
                     </div>
 
-                    <div id="visits" style="height: 300px;"></div>
+                    <div id="visits" style="height: 300px;">
+                        <div class="spinner-border spinme" role="status"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -108,6 +111,7 @@
                     <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
 
                     <div class="mt-2 referrers">
+                        <div class="spinner-border spinme" role="status"></div>
                     </div>
                 </div>
             </div>
@@ -121,6 +125,7 @@
                     <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
 
                     <div class="mt-2 pages">
+                        <div class="spinner-border spinme" role="status"></div>
                     </div>
                 </div>
             </div>
@@ -133,7 +138,9 @@
                 <div class="card-body">
                     <h5 class="card-title">Countries</h5>
 
-                    <div id="svgMap"></div>
+                    <div id="svgMap">
+                        <div class="spinner-border spinme" role="status"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -161,6 +168,7 @@
                             <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
 
                             <div class="mt-2 devices">
+                                <div class="spinner-border spinme" role="status"></div>
                             </div>
                         </div>
 
@@ -169,6 +177,7 @@
                             <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
 
                             <div class="mt-2 browsers">
+                                <div class="spinner-border spinme" role="status"></div>
                             </div>
                         </div>
 
@@ -177,6 +186,7 @@
                             <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
 
                             <div class="mt-2 os">
+                                <div class="spinner-border spinme" role="status"></div>
                             </div>
                         </div>
                     </div>

@@ -74,10 +74,15 @@ async function load() {
 
     const result = await worker.db.query(statement);
 
-    // Cleanup
+    // Cleanup Loading Spinners / previous output
+    $('.browsers').innerHTML = '';
+    $('.devices').innerHTML = '';
     $('#svgMap').innerHTML = '';
     $('#visits').innerHTML = '';
+    $('.pages').innerHTML = '';
+    $('.os').innerHTML = '';
 
+    // Debug / Demo output
     $('div pre').textContent = JSON.stringify(result, null, 2);
 
     // Aggregate results
