@@ -13,18 +13,16 @@
 
     <style>
         .svgMap-map-wrapper { background: transparent }
-        .w-495 { width: 49.5%!important }
         .text-right { text-align: right !important }
-        .float-right { float: right }
         .bg-grey { background: #1A2C7233 }
+        .w-495 { width: 49.5% !important }
+        .min-357 { min-height: 357px }
+        .float-right { float: right }
+        .cp { cursor: pointer }
 
         .nav-tabs { font-size: 12px }
-        .nav-tabs .nav-link {
-            padding-top: 0.5rem;
-            padding-bottom: 0.5rem;
-        }
+        .nav-tabs .nav-link { padding-top: 0.5rem; padding-bottom: 0.5rem }
         .dropdown-menu.show { z-index: 99999 !important; transform: translate3d(-50px, 42px, 0px) !important }
-        .min-357 { min-height: 357px }
 
         .shaded img { max-height: 18px; margin-top: -4px }
         .shaded a { color: #000 }
@@ -41,9 +39,12 @@
         <div class="collapse navbar-collapse" id="navbarColor01">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                    <a class="nav-link active" href="#">Home
+                    <a class="nav-link cp active">Home
                         <span class="visually-hidden">(current)</span>
                     </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link cp" onclick="changeDomain()">Change Domain</a>
                 </li>
             </ul>
         </div>
@@ -62,13 +63,13 @@
         <div class="col-md-6">
             <ul class="nav nav-pills mb-1">
                 <li class="nav-item dropdown ms-auto">
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button">Yesterday</a>
+                    <a class="nav-link dropdown-toggle cp" data-bs-toggle="dropdown" role="button">Yesterday</a>
                     <div class="dropdown-menu" style="">
-                        <a class="dropdown-item" href="#" onclick="render(daysAgo(0), daysAgo(0)); $('.dropdown-toggle').text(this.textContent)">Latest</a>
-                        <a class="dropdown-item" href="#" onclick="render(daysAgo(1), daysAgo(1)); $('.dropdown-toggle').text(this.textContent)">Yesterday</a>
+                        <a class="dropdown-item cp" onclick="render(daysAgo(0), daysAgo(0)); $('.dropdown-toggle').text(this.textContent)">Latest</a>
+                        <a class="dropdown-item cp" onclick="render(daysAgo(1), daysAgo(1)); $('.dropdown-toggle').text(this.textContent)">Yesterday</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#" onclick="render(daysAgo(7), daysAgo(0)); $('.dropdown-toggle').text(this.textContent)">Last 7 Days</a>
-                        <a class="dropdown-item" href="#" onclick="render(daysAgo(30), daysAgo(0)); $('.dropdown-toggle').text(this.textContent)">Last 30 Days</a>
+                        <a class="dropdown-item cp" onclick="render(daysAgo(7), daysAgo(0)); $('.dropdown-toggle').text(this.textContent)">Last 7 Days</a>
+                        <a class="dropdown-item cp" onclick="render(daysAgo(30), daysAgo(0)); $('.dropdown-toggle').text(this.textContent)">Last 30 Days</a>
                     </div>
                 </li>
             </ul>
@@ -214,6 +215,13 @@
 <script src="https://cdn.jsdelivr.net/gh/StephanWagner/svgMap@v2.5.2/dist/svgMap.min.js"></script>
 
 <script src="./dist/bundle.js"></script>
+
+<script>
+    function changeDomain() {
+        let p = prompt('New Hostname');
+        location.search = `?host=${ p.toLowerCase() }`;
+    }
+</script>
 
 <script src="a.js?v4"></script>
 </body>
