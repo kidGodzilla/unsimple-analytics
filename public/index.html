@@ -7,12 +7,254 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Unsimple Analytics</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/5.0.2/zephyr/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+
+    <link href="https://cdn.jsdelivr.net/gh/StephanWagner/svgMap@v2.5.2/dist/svgMap.min.css" rel="stylesheet">
+
+    <style>
+        .svgMap-map-wrapper { background: transparent }
+        .w-495 { width: 49.5%!important }
+        .text-right { text-align: right !important }
+        .float-right { float: right }
+        .bg-grey { background: #1A2C7288 }
+
+        .nav-tabs { font-size: 12px }
+        .nav-tabs .nav-link {
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+    </style>
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <a class="navbar-brand" href="#">Unsimple Analytics</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarColor01">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">Home
+                        <span class="visually-hidden">(current)</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
 <div class="container mt-5">
-    <code><pre>Loading..</pre></code>
+
+    <div class="row">
+        <div class="col-md-6 xoffset-md-1">
+            <h5 class="d-inline pt-2 mb-0">Website.name</h5>
+
+            <span class="text-success" style="display: inline-block;
+    margin-left: 16px;
+    margin-right: 4px;
+    transform-origin: center center;
+    transform: scale(4) translateY(-0.85px);">·</span>
+            No current visitors
+        </div>
+        <div class="col-md-6">
+            <ul class="nav nav-pills mb-1">
+                <li class="nav-item dropdown ms-auto">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button">Today</a>
+                    <div class="dropdown-menu" style="">
+                        <a class="dropdown-item" href="#">Today</a>
+                        <a class="dropdown-item" href="#">Realtime</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Last 7 Days</a>
+                        <a class="dropdown-item" href="#">Last 30 Days</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Month to Date</a>
+                        <a class="dropdown-item" href="#">Last Month</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Last 6 Months</a>
+                        <a class="dropdown-item" href="#">Last 12 Months</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 xoffset-md-1">
+            <div class="card">
+                <div class="card-body">
+
+                    <div class="row">
+                        <div class="col-sm-3 xtext-center">
+                            <h6 class="card-subtitle mb-2 text-muted">Visitors</h6>
+                            <h4 class="card-title visitors"></h4>
+                        </div>
+
+                        <div class="col-sm-3 xtext-center">
+                            <h6 class="card-subtitle mb-2 text-muted">Total Pageviews</h6>
+                            <h4 class="card-title pageviews"></h4>
+                        </div>
+                    </div>
+
+                    <div id="visits" style="height: 300px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Top Sources</h5>
+                    <small class="text-muted w-495 d-inline-block">Source</small>
+                    <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
+
+                    <div class="mt-2">
+                        <div class="mb-1">
+                            <div class="shaded d-inline-block bg-grey text-white pt-1 pb-1" style="width: 85%">&nbsp;Microsoft Bing</div>
+                            <span class="float-right text-right pt-1">57</span>
+                        </div>
+                        <div class="mb-1">
+                            <div class="shaded d-inline-block bg-grey text-white pt-1 pb-1" style="width: 70%">&nbsp;Facebook</div>
+                            <span class="float-right text-right pt-1">44</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Top Pages</h5>
+                    <small class="text-muted w-495 d-inline-block">Page URL</small>
+                    <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
+
+                    <div class="mt-2">
+                        <div class="mb-1">
+                            <div class="shaded d-inline-block bg-grey text-white pt-1 pb-1" style="width: 85%">&nbsp;/Sites</div>
+                            <span class="float-right text-right pt-1">57</span>
+                        </div>
+                        <div class="mb-1">
+                            <div class="shaded d-inline-block bg-grey text-white pt-1 pb-1" style="width: 70%">&nbsp;/</div>
+                            <span class="float-right text-right pt-1">44</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Countries</h5>
+
+                    <div id="svgMap"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title float-left" style="margin-bottom: -37px;">Devices</h5>
+
+                    <ul class="nav nav-tabs float-right">
+                        <li class="nav-item ms-auto">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#size">Size</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#browser">Browser</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#os">OS</a>
+                        </li>
+                    </ul>
+
+
+                    <div class="tab-content mt-5">
+                        <div class="tab-pane fade show active" id="size">
+                            <small class="text-muted w-495 d-inline-block">Size</small>
+                            <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
+
+                            <div class="mt-2">
+                                <div class="mb-1">
+                                    <div class="shaded d-inline-block bg-grey text-white pt-1 pb-1" style="width: 85%">&nbsp;Mobile</div>
+                                    <span class="float-right text-right pt-1">57</span>
+                                </div>
+                                <div class="mb-1">
+                                    <div class="shaded d-inline-block bg-grey text-white pt-1 pb-1" style="width: 70%">&nbsp;Desktop</div>
+                                    <span class="float-right text-right pt-1">44</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="browser">
+                            <small class="text-muted w-495 d-inline-block">Browser</small>
+                            <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
+
+                            <div class="mt-2">
+                                <div class="mb-1">
+                                    <div class="shaded d-inline-block bg-grey text-white pt-1 pb-1" style="width: 85%">&nbsp;Netscape Navigator</div>
+                                    <span class="float-right text-right pt-1">57</span>
+                                </div>
+                                <div class="mb-1">
+                                    <div class="shaded d-inline-block bg-grey text-white pt-1 pb-1" style="width: 70%">&nbsp;Internet Exploder</div>
+                                    <span class="float-right text-right pt-1">44</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="os">
+                            <small class="text-muted w-495 d-inline-block">OS</small>
+                            <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
+
+                            <div class="mt-2">
+                                <div class="mb-1">
+                                    <div class="shaded d-inline-block bg-grey text-white pt-1 pb-1" style="width: 85%">&nbsp;Windows 3.1</div>
+                                    <span class="float-right text-right pt-1">57</span>
+                                </div>
+                                <div class="mb-1">
+                                    <div class="shaded d-inline-block bg-grey text-white pt-1 pb-1" style="width: 70%">&nbsp;Windows ME</div>
+                                    <span class="float-right text-right pt-1">44</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 xoffset-md-1 mt-3">
+            <div class="card">
+                <div class="card-body">
+                    <code><pre>Loading..</pre></code>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
+<img src="https://unsimple.b-cdn.net/o.png" alt="Totally Not a Tracking Pixel its two pixels wide">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-compat/3.0.0-alpha1/jquery.js"><\/script>')</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/StephanWagner/svgMap@v2.5.2/dist/svgMap.min.js"></script>
+
+<!--<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>-->
 <script src="./dist/bundle.js"></script>
 </body>
 </html>
