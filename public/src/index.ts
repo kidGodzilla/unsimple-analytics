@@ -5,7 +5,7 @@ const wasmUrl = new URL("sql.js-httpvfs/dist/sql-wasm.wasm", import.meta.url);
 
 async function load() {
   let url = (location.hostname === 'localhost' ? `${ location.protocol }//${ location.host }/` : 'https://analytics.serv.rs/') + `analytics.sqlite3`;
-  console.log('url', url);
+  // console.log('url', url);
 
   const worker = await createDbWorker(
     [
@@ -14,7 +14,7 @@ async function load() {
         config: {
           serverMode: "full",
           url: url,
-          requestChunkSize: 4096
+          requestChunkSize: 1024
         }
       }
     ],
