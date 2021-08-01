@@ -15,6 +15,16 @@ const db = new Database('public/analytics.sqlite3'); // , { verbose: console.log
 // let stmt = db.prepare(`DROP TABLE visits`);
 // stmt.run();
 
+// Optional Recommended Improvements
+let stmt = db.prepare(`pragma journal_mode = delete;`);
+stmt.run();
+
+stmt = db.prepare(`pragma page_size = 1024;`);
+stmt.run();
+
+stmt = db.prepare(`vacuum;`);
+stmt.run();
+
 // Create `visits` Table
 stmt = db.prepare(`CREATE TABLE IF NOT EXISTS visits (
     id TEXT PRIMARY KEY,
@@ -35,6 +45,10 @@ stmt = db.prepare(`CREATE TABLE IF NOT EXISTS visits (
     referer_host TEXT
 )`);
 
+stmt.run();
+
+// Vacuum again
+stmt = db.prepare(`vacuum;`);
 stmt.run();
 
 // Insert via prepared statement
@@ -192,6 +206,10 @@ function parseLogs (logs) {
 
         insertMany(out);
     });
+
+    // Vacuum (again)
+    let stmt = db.prepare(`vacuum;`);
+    stmt.run();
 }
 
 // Read Test data from local log file
