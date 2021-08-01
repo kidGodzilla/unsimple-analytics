@@ -157,50 +157,60 @@ async function load() {
     $('.browsers').innerHTML = tableFragment(browsers);
     $('.os').innerHTML = tableFragment(os);
 
-    // @ts-ignore
-    new Morris.Line({
-      // ID of the element in which to draw the chart.
-      element: 'visits',
-      // Chart data records -- each entry in this array corresponds to a point on
-      // the chart.
-      data: data || [
-        { year: '2008', value: 20 },
-        { year: '2009', value: 10 },
-        { year: '2010', value: 5 },
-        { year: '2011', value: 5 },
-        { year: '2012', value: 20 }
-      ],
-      // The name of the data record attribute that contains x-values.
-      xkey: 'hour',
-      // A list of names of data record attributes that contain y-values.
-      ykeys: ['value'],
-      // Labels for the ykeys -- will be displayed when you hover over the
-      // chart.
-      labels: ['Visits']
-    });
+    function renderCharts() {
+      $('#svgMap').innerHTML = '';
+      $('#visits').innerHTML = '';
 
-    // SVG Map
-    // @ts-ignore
-    new svgMap({
-      targetElementID: 'svgMap',
-      data: {
+      // @ts-ignore
+      new Morris.Line({
+        // ID of the element in which to draw the chart.
+        element: 'visits',
+        // Chart data records -- each entry in this array corresponds to a point on
+        // the chart.
+        data: data || [
+          { year: '2008', value: 20 },
+          { year: '2009', value: 10 },
+          { year: '2010', value: 5 },
+          { year: '2011', value: 5 },
+          { year: '2012', value: 20 }
+        ],
+        // The name of the data record attribute that contains x-values.
+        xkey: 'hour',
+        // A list of names of data record attributes that contain y-values.
+        ykeys: ['value'],
+        // Labels for the ykeys -- will be displayed when you hover over the
+        // chart.
+        labels: ['Visits']
+      });
+
+      // SVG Map
+      // @ts-ignore
+      new svgMap({
+        targetElementID: 'svgMap',
         data: {
-          visitors: {
-            name: 'visitors',
-            format: '{0}',
-            thousandSeparator: ',',
-            // thresholdMax: 50000,
-            // thresholdMin: 1000
+          data: {
+            visitors: {
+              name: 'visitors',
+              format: '{0}',
+              thousandSeparator: ',',
+              // thresholdMax: 50000,
+              // thresholdMin: 1000
+            }
+          },
+          applyData: 'visitors',
+          values: countries || {
+            AF: { visitors: 587 },
+            AL: { visitors: 4583 },
+            DZ: { visitors: 4293 }
           }
-        },
-        applyData: 'visitors',
-        values: countries || {
-          AF: { visitors: 587 },
-          AL: { visitors: 4583 },
-          DZ: { visitors: 4293 }
         }
-      }
+      });
+    }
+
+    window.addEventListener('resize', () => {
+      setTimeout(renderCharts, 555)
     });
+    renderCharts();
 
     // Pageviews & Visitors
     $('.visitors').textContent = visitors.length;
