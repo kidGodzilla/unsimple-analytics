@@ -41,19 +41,31 @@ async function load() {
 
   // Aggregate results
   let map = {};
+  let referrers = {};
   let countries = {};
   let pageviews = 0;
   let visitors = [];
+  let types = {};
 
   // console.log(result);
+
+  function incr(o, k) {
+    if (!o[k]) o[k] = 0;
+    o[k]++;
+  }
 
   result.forEach(item => {
     let d = new Date(item.ts * 1000);
     let h = d.getHours();
 
     // Aggregate
-    if (!map[h]) map[h] = 0;
-    map[h]++;
+    incr(map, h);
+
+    // referrers
+    incr(referrers, item.referer_host);
+
+    // Device type
+    incr(types, item.device_type);
 
     // Countries
     if (!countries[item.country_code]) countries[item.country_code] = { visitors: 0 };
@@ -72,7 +84,7 @@ async function load() {
     data.push({ hour: `${ yesterday.toISOString().slice(0,10) } ${ i }:00`, value: (map[i] || 0) });
   }
 
-  // console.log(map, data);
+  console.log(map, data, referrers, referrers['']);
 
   // @ts-ignore
   new Morris.Line({
