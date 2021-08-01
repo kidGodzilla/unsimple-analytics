@@ -23,7 +23,7 @@
             padding-top: 0.5rem;
             padding-bottom: 0.5rem;
         }
-        .dropdown-menu.show { z-index: 99 }
+        .dropdown-menu.show { z-index: 99999 !important; transform: translate3d(-50px, 42px, 0px) !important }
         .min-357 { min-height: 357px }
     </style>
 </head>
@@ -53,20 +53,15 @@
         <div class="col-md-6 xoffset-md-1">
             <h5 class="d-inline pt-2 mb-0">Website.name</h5>
 
-            <span class="text-success" style="display: inline-block;
-    margin-left: 16px;
-    margin-right: 4px;
-    transform-origin: center center;
-    transform: scale(4) translateY(-0.85px);">·</span>
+            <span class="text-success" style="display: inline-block; margin-left: 16px; margin-right: 4px; transform-origin: center center; transform: scale(4) translateY(-0.85px);">·</span>
             <span class="current-visitors">No current visitors</span>
         </div>
         <div class="col-md-6">
             <ul class="nav nav-pills mb-1">
                 <li class="nav-item dropdown ms-auto">
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button">Today</a>
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button">Latest</a>
                     <div class="dropdown-menu" style="">
-                        <a class="dropdown-item" href="#">Today</a>
-                        <a class="dropdown-item" href="#">Realtime</a>
+                        <a class="dropdown-item" href="#">Latest</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="#">Last 7 Days</a>
                         <a class="dropdown-item" href="#">Last 30 Days</a>
@@ -114,14 +109,6 @@
                     <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
 
                     <div class="mt-2 referrers">
-                        <div class="mb-1">
-                            <div class="shaded d-inline-block bg-grey text-white pt-1 pb-1" style="width: 85%">&nbsp;Microsoft Bing</div>
-                            <span class="float-right text-right pt-1">57</span>
-                        </div>
-                        <div class="mb-1">
-                            <div class="shaded d-inline-block bg-grey text-white pt-1 pb-1" style="width: 70%">&nbsp;Facebook</div>
-                            <span class="float-right text-right pt-1">44</span>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -135,14 +122,6 @@
                     <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
 
                     <div class="mt-2 pages">
-                        <div class="mb-1">
-                            <div class="shaded d-inline-block bg-grey text-white pt-1 pb-1" style="width: 85%">&nbsp;/Sites</div>
-                            <span class="float-right text-right pt-1">57</span>
-                        </div>
-                        <div class="mb-1">
-                            <div class="shaded d-inline-block bg-grey text-white pt-1 pb-1" style="width: 70%">&nbsp;/</div>
-                            <span class="float-right text-right pt-1">44</span>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -177,21 +156,12 @@
                         </li>
                     </ul>
 
-
                     <div class="tab-content mt-5">
                         <div class="tab-pane fade show active" id="size">
                             <small class="text-muted w-495 d-inline-block">Type</small>
                             <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
 
                             <div class="mt-2 devices">
-<!--                                <div class="mb-1">-->
-<!--                                    <div class="shaded d-inline-block bg-grey text-white pt-1 pb-1" style="width: 85%">&nbsp;Mobile</div>-->
-<!--                                    <span class="float-right text-right pt-1">57</span>-->
-<!--                                </div>-->
-<!--                                <div class="mb-1">-->
-<!--                                    <div class="shaded d-inline-block bg-grey text-white pt-1 pb-1" style="width: 70%">&nbsp;Desktop</div>-->
-<!--                                    <span class="float-right text-right pt-1">44</span>-->
-<!--                                </div>-->
                             </div>
                         </div>
 
@@ -200,14 +170,6 @@
                             <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
 
                             <div class="mt-2 browsers">
-<!--                                <div class="mb-1">-->
-<!--                                    <div class="shaded d-inline-block bg-grey text-white pt-1 pb-1" style="width: 85%">&nbsp;Netscape Navigator</div>-->
-<!--                                    <span class="float-right text-right pt-1">57</span>-->
-<!--                                </div>-->
-<!--                                <div class="mb-1">-->
-<!--                                    <div class="shaded d-inline-block bg-grey text-white pt-1 pb-1" style="width: 70%">&nbsp;Internet Exploder</div>-->
-<!--                                    <span class="float-right text-right pt-1">44</span>-->
-<!--                                </div>-->
                             </div>
                         </div>
 
@@ -216,14 +178,6 @@
                             <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
 
                             <div class="mt-2 os">
-<!--                                <div class="mb-1">-->
-<!--                                    <div class="shaded d-inline-block bg-grey text-white pt-1 pb-1" style="width: 85%">&nbsp;Windows 3.1</div>-->
-<!--                                    <span class="float-right text-right pt-1">57</span>-->
-<!--                                </div>-->
-<!--                                <div class="mb-1">-->
-<!--                                    <div class="shaded d-inline-block bg-grey text-white pt-1 pb-1" style="width: 70%">&nbsp;Windows ME</div>-->
-<!--                                    <span class="float-right text-right pt-1">44</span>-->
-<!--                                </div>-->
                             </div>
                         </div>
                     </div>
