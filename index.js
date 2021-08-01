@@ -224,11 +224,13 @@ const D = new Date();
 let iso_date = `${ D.toISOString().slice(5, 10) }-${ D.toISOString().slice(2, 4) }`;
 
 if (process.env.PULL_ZONE_ID && process.env.ACCESS_KEY && iso_date) {
+    console.log('Downloading latest log data from Bunny CDN');
+
     request.get(`https://logging.bunnycdn.com/${ iso_date }/${ process.env.PULL_ZONE_ID }.log`)
         .set('AccessKey', process.env.ACCESS_KEY)
         .set('accept', 'json')
         .end((err, res) => {
-            console.log('Parsing today\'s logs');
+            console.log('Parsing today\'s logs & Updating Database');
             parseLogs(res.text);
         });
 }
