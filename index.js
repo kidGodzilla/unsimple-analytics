@@ -12,8 +12,8 @@ let debug = 0;
 const db = new Database('public/analytics.sqlite3'); // , { verbose: console.log }
 
 // Drop previous `visits` table
-let stmt = db.prepare(`DROP TABLE visits`);
-stmt.run();
+// let stmt = db.prepare(`DROP TABLE visits`);
+// stmt.run();
 
 // Create `visits` Table
 stmt = db.prepare(`CREATE TABLE IF NOT EXISTS visits (
