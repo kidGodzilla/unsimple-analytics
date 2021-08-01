@@ -11,8 +11,12 @@ let debug = 0;
 // Use SQLite3 Database
 const db = new Database('public/analytics.sqlite3'); // , { verbose: console.log }
 
+// Drop previous `visits` table
+let stmt = db.prepare(`DROP TABLE visits`);
+stmt.run();
+
 // Create `visits` Table
-let stmt = db.prepare(`CREATE TABLE IF NOT EXISTS visits (
+stmt = db.prepare(`CREATE TABLE IF NOT EXISTS visits (
     id TEXT PRIMARY KEY,
     date TEXT,
     ts INTEGER,
@@ -27,7 +31,8 @@ let stmt = db.prepare(`CREATE TABLE IF NOT EXISTS visits (
     os TEXT,
     os_major_version TEXT,
     os_minor_version TEXT,
-    country_code TEXT
+    country_code TEXT,
+    referer_host TEXT
 )`);
 
 stmt.run();
@@ -48,7 +53,8 @@ const insert = db.prepare(`INSERT OR IGNORE INTO visits (
     os, 
     os_major_version, 
     os_minor_version, 
-    country_code
+    country_code,
+    referer_host
 ) VALUES (
     @unique_request_id, 
     @iso_date,
@@ -64,7 +70,8 @@ const insert = db.prepare(`INSERT OR IGNORE INTO visits (
     @os, 
     @os_major_version, 
     @os_minor_version, 
-    @country_code
+    @country_code,
+    @referer_host
 )`);
 
 // Insert one or many function
@@ -173,6 +180,7 @@ function parseLogs (logs) {
             }
         });
 
+        if (!out.referer_host) out.referer_host = '';
         out.status_code = parseInt(out.status_code);
         // delete out.unique_request_id;
         delete out.cache_status;
@@ -192,7 +200,9 @@ function parseLogs (logs) {
 // parseLogs(logs);
 
 // Fetch today's logs from Bunny CDN
-let D = new Date();
+const D = new Date();
+// const yesterday = new Date(D);
+// yesterday.setDate(yesterday.getDate() - 1);
 let iso_date = `${ D.toISOString().slice(5, 10) }-${ D.toISOString().slice(2, 4) }`;
 
 if (process.env.PULL_ZONE_ID && process.env.ACCESS_KEY && iso_date) {
@@ -200,7 +210,6 @@ if (process.env.PULL_ZONE_ID && process.env.ACCESS_KEY && iso_date) {
         .set('AccessKey', process.env.ACCESS_KEY)
         .set('accept', 'json')
         .end((err, res) => {
-            // console.log(res.text);
             parseLogs(res.text);
         });
 }
