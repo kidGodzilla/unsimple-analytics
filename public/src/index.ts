@@ -67,9 +67,11 @@ async function load() {
   }
 
   async function render(start, end) {
-    let statement = `SELECT * FROM visits WHERE date BETWEEN '${ isoDate(start) }' AND '${ isoDate(end) }'`;
+    let host = new URLSearchParams(window.location.search).get('host') || 'unsimple.b-cdn.net';
+
+    let statement = `SELECT * FROM visits WHERE host = '${ host }' AND date BETWEEN '${ isoDate(start) }' AND '${ isoDate(end) }'`;
     let hourly = start === end;
-    console.log(statement, hourly);
+    // console.log(statement, hourly);
 
     const result = await worker.db.query(statement);
 
@@ -143,7 +145,7 @@ async function load() {
       }
     }
 
-    console.log(map, data, referrers, browsers, pathnames, os, types, pageviews, visitors.length);
+    // console.log(map, data, referrers, browsers, pathnames, os, types, pageviews, visitors.length);
 
     $('.referrers').innerHTML = tableFragment(referrers, s => `<img src="https://logo.clearbit.com/${ s }" onerror="this.onerror=null; this.src='default.png';">&nbsp;<a href="http://${ s }" target="_blank">${ s }</a>`);
     $('.pages').innerHTML = tableFragment(pathnames, s => `<a href="http://${ 'unsimple.b-cdn.net' }${ s }" target="_blank">${ s }</a>`);
@@ -203,14 +205,11 @@ async function load() {
 
   // Start by rendering yesterday's data
   render(daysAgo(1), daysAgo(1));
-  // render(daysAgo(1), daysAgo(0));
 
   // @ts-ignore
   window.daysAgo = daysAgo;
   // @ts-ignore
   window.render = render;
-
-
 }
 
 load();
