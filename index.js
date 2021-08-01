@@ -220,6 +220,8 @@ function parseLogs (logs) {
                     out.pathname = parsed.pathname;
                     out.host = parsed.host;
                 }
+
+                if (out.host.indexOf('www.') === 0) out.host = out.host.replace('www.', '');
             }
         });
 

@@ -70,6 +70,7 @@ async function load() {
 
   async function render(start, end) {
     let host = new URLSearchParams(window.location.search).get('host') || 'analytics.serv.rs' || 'unsimple.b-cdn.net';
+    if (host.indexOf('www.') === 0) host = host.replace('www.', '');
     $('h5.name').textContent = capitalize(host);
 
     let statement = `SELECT * FROM visits WHERE host = '${ host }' AND date BETWEEN '${ isoDate(start) }' AND '${ isoDate(end) }'`;
