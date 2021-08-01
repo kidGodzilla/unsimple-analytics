@@ -23,6 +23,7 @@
             padding-top: 0.5rem;
             padding-bottom: 0.5rem;
         }
+        .dropdown-menu.show { z-index: 99 }
     </style>
 </head>
 <body>
@@ -56,7 +57,7 @@
     margin-right: 4px;
     transform-origin: center center;
     transform: scale(4) translateY(-0.85px);">·</span>
-            No current visitors
+            <span class="current-visitors">No current visitors</span>
         </div>
         <div class="col-md-6">
             <ul class="nav nav-pills mb-1">
@@ -165,7 +166,7 @@
 
                     <ul class="nav nav-tabs float-right">
                         <li class="nav-item ms-auto">
-                            <a class="nav-link active" data-bs-toggle="tab" href="#size">Size</a>
+                            <a class="nav-link active" data-bs-toggle="tab" href="#size">Type</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-bs-toggle="tab" href="#browser">Browser</a>
@@ -178,7 +179,7 @@
 
                     <div class="tab-content mt-5">
                         <div class="tab-pane fade show active" id="size">
-                            <small class="text-muted w-495 d-inline-block">Size</small>
+                            <small class="text-muted w-495 d-inline-block">Type</small>
                             <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
 
                             <div class="mt-2">
