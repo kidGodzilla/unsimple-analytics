@@ -69,7 +69,7 @@ async function load() {
     let host = new URLSearchParams(window.location.search).get('host') || 'unsimple.b-cdn.net';
 
     let statement = `SELECT * FROM visits WHERE host = '${ host }' AND date BETWEEN '${ isoDate(start) }' AND '${ isoDate(end) }'`;
-    let hourly = start === end;
+    let hourly = start == end;
     // console.log(statement, hourly);
 
     const result = await worker.db.query(statement);
