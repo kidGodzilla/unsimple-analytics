@@ -228,6 +228,7 @@ if (process.env.PULL_ZONE_ID && process.env.ACCESS_KEY && iso_date) {
         .set('AccessKey', process.env.ACCESS_KEY)
         .set('accept', 'json')
         .end((err, res) => {
+            console.log('Parsing today\'s logs');
             parseLogs(res.text);
         });
 }
