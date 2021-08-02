@@ -91,6 +91,8 @@ async function load() {
     $('div pre').textContent = JSON.stringify(result, null, 2);
 
     // Aggregate results
+    let maxSessionLength = {};
+    let pageVisits = {};
     let referrers = {};
     let countries = {};
     let pathnames = {};
@@ -130,6 +132,14 @@ async function load() {
       // Pathnames
       incr(pathnames, item.pathname);
 
+      // Session length
+      if (item.session_length && (!maxSessionLength[item.ip] || maxSessionLength[item.ip] < item.session_length))
+        maxSessionLength[item.ip] = item.session_length;
+
+      // Page visits pageVisits
+      if (!pageVisits[item.ip]) pageVisits[item.ip] = 0
+      pageVisits[item.ip]++;
+
       // Countries
       if (!countries[item.country_code]) countries[item.country_code] = { visitors: 0 };
       countries[item.country_code].visitors++;
@@ -139,6 +149,24 @@ async function load() {
       if (!visitors.includes(item.ip)) visitors.push(item.ip);
       pageviews++;
     });
+
+    // Calculate average session duration
+    let avgSessionLength = 0, counter = 0;
+    for (let k in maxSessionLength) {
+      avgSessionLength += maxSessionLength[k];
+      counter++;
+    }
+    if (counter) avgSessionLength = avgSessionLength / counter;
+    // console.log(maxSessionLength, avgSessionLength, counter);
+
+    // Calculate Bounce Rate
+    let onePageVisits = 0, visitorCount = visitors.length;
+    for (let k in pageVisits) {
+      if (pageVisits[k] === 1)
+        onePageVisits++;
+    }
+    let bounceRate = onePageVisits / visitorCount;
+    // console.log(pageVisits, bounceRate, onePageVisits, visitorCount)
 
     let data = [];
 
@@ -217,9 +245,13 @@ async function load() {
     });
     renderCharts();
 
-    // Pageviews & Visitors
+    function fmtMSS(s) { return(s-(s%=60))/60+(9<s?':':':0')+s }
+
+    // Pageviews, Visitors, Bounce Rate, Duration
     $('.visitors').textContent = visitors.length;
     $('.pageviews').textContent = pageviews;
+    $('.duration').textContent = avgSessionLength ? fmtMSS(avgSessionLength) + 's' : '-';
+    $('.bounced').textContent = (bounceRate * 100).toFixed(2) + '%';
   }
 
   // Start by rendering yesterday's data
