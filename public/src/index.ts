@@ -69,7 +69,7 @@ async function load() {
   }
 
   async function render(start, end) {
-    let host = new URLSearchParams(window.location.search).get('host') || 'analytics.serv.rs' || 'unsimple.b-cdn.net';
+    let host = new URLSearchParams(window.location.search).get('host') || 'analytics.serv.rs';
     if (host.indexOf('www.') === 0) host = host.replace('www.', '');
     $('h5.name').textContent = capitalize(host);
 
