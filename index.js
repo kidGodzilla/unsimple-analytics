@@ -50,7 +50,10 @@ stmt = db.prepare(`CREATE TABLE IF NOT EXISTS visits (
     referer_host TEXT,
     headless INTEGER,
     bot INTEGER,
-    width INTEGER
+    width INTEGER,
+    session_length REAL,
+    pageviews INTEGER,
+    load_time REAL
 )`);
 
 stmt.run();
@@ -80,7 +83,10 @@ const insert = db.prepare(`INSERT OR IGNORE INTO visits (
     referer_host,
     headless,
     bot,
-    width
+    width,
+    session_length,
+    pageviews,
+    load_time
 ) VALUES (
     @unique_request_id, 
     @iso_date,
@@ -101,7 +107,10 @@ const insert = db.prepare(`INSERT OR IGNORE INTO visits (
     @referer_host,
     @headless,
     @bot,
-    @width
+    @width,
+    @session_length,
+    @pageviews,
+    @load_time
 )`);
 
 // Insert one or many function
@@ -157,6 +166,11 @@ function parseLogs (logs) {
             if (parsed.query.width) out.width = parseInt(parsed.query.width);
             if (parsed.query.bot) out.bot = parseInt(parsed.query.bot);
             if (parsed.query.href) parts[7] = parsed.query.href;
+
+            if (parsed.query.time) out.session_length = parseFloat(parsed.query.time);
+            if (parsed.query.views) out.pageviews = parseInt(parsed.query.views);
+            if (parsed.query.load) out.load_time = parseFloat(parsed.query.load);
+
             parts[6] = parsed.query.referrer || '';
         }
 
@@ -223,7 +237,10 @@ function parseLogs (logs) {
             }
         });
 
+        if (!out.session_length) out.session_length = 0;
         if (!out.referer_host) out.referer_host = '';
+        if (!out.pageviews) out.pageviews = 0;
+        if (!out.load_time) out.load_time = 0;
         if (!out.headless) out.headless = 0;
         if (!out.width) out.width = 0;
         if (!out.bot) out.bot = 0;
@@ -255,7 +272,8 @@ const D = new Date();
 // const yesterday = new Date(D);
 // yesterday.setDate(yesterday.getDate() - 1);
 let iso_date = `${ D.toISOString().slice(5, 10) }-${ D.toISOString().slice(2, 4) }`;
-if (drop) iso_date = '07-31-21'; // Convenience
+// if (drop) iso_date = '07-31-21';
+// iso_date = '08-01-21';
 
 if (process.env.PULL_ZONE_ID && process.env.ACCESS_KEY && iso_date) {
     console.log(`Downloading (${ iso_date }) log data from Bunny CDN`);
