@@ -23,8 +23,9 @@
         var isBot = /bot|googlebot|crawler|spider|robot|crawling/i.test(navigator.userAgent);
         var rand = (Math.random() + 1).toString(36).substring(5);
         var img = document.createElement("img");
+        var lang = navigator.language || '';
 
-        var url = `https://unsimple.b-cdn.net/o.png?host=${ encodeURIComponent(host) }&referrer=${ encodeURIComponent(referrer) }&href=${ encodeURIComponent(href) }&width=${ width }&bot=${ isBot ? 1 : 0 }&headless=${ isHeadless ? 1 : 0 }&load=${ loadTime }&views=${ viewCount }&time=${ sessionTime }&v=${ rand }`;
+        var url = `https://unsimple.b-cdn.net/o.png?host=${ encodeURIComponent(host) }&referrer=${ encodeURIComponent(referrer) }&href=${ encodeURIComponent(href) }&width=${ width }&bot=${ isBot ? 1 : 0 }&headless=${ isHeadless ? 1 : 0 }&load=${ loadTime }&views=${ viewCount }&time=${ sessionTime }&lang=${ lang }&v=${ rand }`;
         lastPathname = location.pathname;
         img.src = url;
 
