@@ -41,9 +41,11 @@ async function load() {
     }
 
     // @ts-ignore
-    lines.sort((b, a) => a.v > b.v && 1 || -1)
+    lines.sort((b, a) => a.v > b.v && 1 || -1);
 
-    lines.forEach(line => {
+    lines.forEach((line, i) => {
+      if (i > 9) return;
+
       // @ts-ignore
       let { v, k } = line;
 
