@@ -269,8 +269,6 @@ function parseLogs (logs) {
 
 // Fetch today's logs from Bunny CDN
 const D = new Date();
-// const yesterday = new Date(D);
-// yesterday.setDate(yesterday.getDate() - 1);
 let iso_date = `${ D.toISOString().slice(5, 10) }-${ D.toISOString().slice(2, 4) }`;
 // if (drop) iso_date = '07-31-21';
 // iso_date = '08-01-21';
