@@ -185,7 +185,7 @@ async function load() {
     // console.log(map, data, referrers, browsers, pathnames, os, types, pageviews, visitors.length);
 
     $('.referrers').innerHTML = tableFragment(referrers, s => s ? `<img src="https://logo.clearbit.com/${ s }" onerror="this.onerror=null; this.src='default.png';">&nbsp;<a href="http://${ s }" target="_blank">${ s }</a>` : 'Direct / None');
-    $('.pages').innerHTML = tableFragment(pathnames, s => `<a href="http://${ 'unsimple.b-cdn.net' }${ s }" target="_blank">${ s }</a>`);
+    $('.pages').innerHTML = tableFragment(pathnames, s => `<a href="http://${ host }${ s }" target="_blank">${ s }</a>`);
     $('.devices').innerHTML = tableFragment(types, s => s.charAt(0).toUpperCase() + s.slice(1));
     $('.browsers').innerHTML = tableFragment(browsers);
     $('.os').innerHTML = tableFragment(os);
