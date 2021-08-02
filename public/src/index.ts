@@ -251,7 +251,7 @@ async function load() {
     $('.visitors').textContent = visitors.length;
     $('.pageviews').textContent = pageviews;
     $('.duration').textContent = avgSessionLength ? fmtMSS(avgSessionLength) + 's' : '-';
-    $('.bounced').textContent = bounceRate ? (bounceRate * 100).toFixed(2) : 0 + '%';
+    $('.bounced').textContent = (bounceRate ? (bounceRate * 100).toFixed(2) : 0) + '%';
   }
 
   // Start by rendering yesterday's data
