@@ -53,7 +53,8 @@ stmt = db.prepare(`CREATE TABLE IF NOT EXISTS visits (
     width INTEGER,
     session_length REAL,
     pageviews INTEGER,
-    load_time REAL
+    load_time REAL,
+    lang TEXT
 )`);
 
 stmt.run();
@@ -86,7 +87,8 @@ const insert = db.prepare(`INSERT OR IGNORE INTO visits (
     width,
     session_length,
     pageviews,
-    load_time
+    load_time,
+    lang
 ) VALUES (
     @unique_request_id, 
     @iso_date,
@@ -110,7 +112,8 @@ const insert = db.prepare(`INSERT OR IGNORE INTO visits (
     @width,
     @session_length,
     @pageviews,
-    @load_time
+    @load_time,
+    @lang
 )`);
 
 // Insert one or many function
@@ -165,6 +168,7 @@ function parseLogs (logs) {
             if (parsed.query.headless) out.headless = parseInt(parsed.query.headless);
             if (parsed.query.width) out.width = parseInt(parsed.query.width);
             if (parsed.query.bot) out.bot = parseInt(parsed.query.bot);
+            if (parsed.query.lang) out.lang = parsed.query.lang;
             if (parsed.query.href) parts[7] = parsed.query.href;
 
             if (parsed.query.time) out.session_length = parseFloat(parsed.query.time);
@@ -243,6 +247,7 @@ function parseLogs (logs) {
         if (!out.load_time) out.load_time = 0;
         if (!out.headless) out.headless = 0;
         if (!out.width) out.width = 0;
+        if (!out.lang) out.lang = '';
         if (!out.bot) out.bot = 0;
 
         out.status_code = parseInt(out.status_code);
