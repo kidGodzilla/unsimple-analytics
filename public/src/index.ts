@@ -80,6 +80,7 @@ async function load() {
     const result = await worker.db.query(statement);
 
     // Cleanup Loading Spinners / previous output
+    $('.languages').innerHTML = '';
     $('.browsers').innerHTML = '';
     $('.devices').innerHTML = '';
     $('#svgMap').innerHTML = '';
@@ -94,6 +95,7 @@ async function load() {
     let maxSessionLength = {};
     let pageVisits = {};
     let referrers = {};
+    let languages = {};
     let countries = {};
     let pathnames = {};
     let pageviews = 0;
@@ -128,6 +130,9 @@ async function load() {
 
       // Browser
       incr(browsers, item.browser);
+
+      // Language
+      incr(languages, item.lang);
 
       // Pathnames
       incr(pathnames, item.pathname);
@@ -187,6 +192,7 @@ async function load() {
     $('.referrers').innerHTML = tableFragment(referrers, s => s ? `<img src="https://logo.clearbit.com/${ s }" onerror="this.onerror=null; this.src='default.png';">&nbsp;<a href="http://${ s }" target="_blank">${ s }</a>` : 'Direct / None');
     $('.pages').innerHTML = tableFragment(pathnames, s => `<a href="http://${ host }${ s }" target="_blank">${ s }</a>`);
     $('.devices').innerHTML = tableFragment(types, s => s.charAt(0).toUpperCase() + s.slice(1));
+    $('.languages').innerHTML = tableFragment(languages, s => s ? s : 'Unknown');
     $('.browsers').innerHTML = tableFragment(browsers);
     $('.os').innerHTML = tableFragment(os);
 

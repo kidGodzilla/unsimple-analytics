@@ -172,14 +172,17 @@
         <div class="col-md-6 mt-3 mt-sm-0">
             <div class="card min-357">
                 <div class="card-body">
-                    <h5 class="card-title float-left" style="margin-bottom: -37px;">Devices</h5>
+                    <h5 class="card-title float-left" style="margin-bottom: -37px;">Users</h5>
 
                     <ul class="nav nav-tabs float-right">
                         <li class="nav-item ms-auto">
-                            <a class="nav-link active" data-bs-toggle="tab" href="#size">Type</a>
+                            <a class="nav-link active" data-bs-toggle="tab" href="#size">Device Type</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-bs-toggle="tab" href="#browser">Browser</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#language">Language</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-bs-toggle="tab" href="#os">OS</a>
@@ -188,7 +191,7 @@
 
                     <div class="tab-content mt-5">
                         <div class="tab-pane fade show active" id="size">
-                            <small class="text-muted w-495 d-inline-block">Type</small>
+                            <small class="text-muted w-495 d-inline-block">Device Type</small>
                             <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
 
                             <div class="mt-2 devices">
@@ -201,6 +204,15 @@
                             <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
 
                             <div class="mt-2 browsers">
+                                <div class="spinner-border spinme" role="status"></div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="language">
+                            <small class="text-muted w-495 d-inline-block">Language</small>
+                            <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
+
+                            <div class="mt-2 languages">
                                 <div class="spinner-border spinme" role="status"></div>
                             </div>
                         </div>
