@@ -72,11 +72,10 @@
     <div class="row">
         <div class="col-6">
 
-
             <ul class="nav nav-pills mb-1 d-inline-block">
                 <li class="nav-item dropdown ms-auto">
                     <a class="nav-link dropdown-toggle cp" data-bs-toggle="dropdown" role="button">
-                        <h5 class="d-inline pt-2 mb-0 name">Website.name</h5>
+                        <h5 class="d-inline pt-2 mb-0 name"></h5>
                     </a>
 
                     <div class="dropdown-menu websites left">
@@ -92,13 +91,13 @@
         <div class="col-6">
             <ul class="nav nav-pills mb-1">
                 <li class="nav-item dropdown ms-auto">
-                    <a class="nav-link dropdown-toggle cp" data-bs-toggle="dropdown" role="button">Latest</a>
+                    <a class="nav-link dropdown-toggle right cp" data-bs-toggle="dropdown" role="button">Latest</a>
                     <div class="dropdown-menu right">
-                        <a class="dropdown-item cp" onclick="render(daysAgo(0), daysAgo(0)); $('.dropdown-toggle').text(this.textContent)">Latest</a>
-                        <a class="dropdown-item cp" onclick="render(daysAgo(1), daysAgo(1)); $('.dropdown-toggle').text(this.textContent)">Yesterday</a>
+                        <a class="dropdown-item cp" onclick="render(daysAgo(0), daysAgo(0)); $('.dropdown-toggle.right').text(this.textContent)">Latest</a>
+                        <a class="dropdown-item cp" onclick="render(daysAgo(1), daysAgo(1)); $('.dropdown-toggle.right').text(this.textContent)">Yesterday</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item cp" onclick="render(daysAgo(7), daysAgo(0)); $('.dropdown-toggle').text(this.textContent)">Last 7 Days</a>
-                        <a class="dropdown-item cp" onclick="render(daysAgo(30), daysAgo(0)); $('.dropdown-toggle').text(this.textContent)">Last 30 Days</a>
+                        <a class="dropdown-item cp" onclick="render(daysAgo(7), daysAgo(0)); $('.dropdown-toggle.right').text(this.textContent)">Last 7 Days</a>
+                        <a class="dropdown-item cp" onclick="render(daysAgo(30), daysAgo(0)); $('.dropdown-toggle.right').text(this.textContent)">Last 30 Days</a>
                     </div>
                 </li>
             </ul>
@@ -271,6 +270,22 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
 <script>window.jQuery || document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-compat/3.0.0-alpha1/jquery.js"><\/script>')</script>
+
+<script>
+    function changeDomain() {
+        let p = prompt('New Hostname');
+        location.search = `?host=${ p.toLowerCase() }`;
+    }
+
+    function capitalize(s) {
+        return s.charAt(0).toUpperCase() + s.slice(1)
+    }
+
+    var host = new URLSearchParams(window.location.search).get('host') || 'analytics.serv.rs';
+    if (host.indexOf('www.') === 0) host = host.replace('www.', '').toLowerCase();
+    $('h5.name').text(capitalize(host));
+</script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"></script>
@@ -280,13 +295,6 @@
 <script src="https://cdn.jsdelivr.net/gh/StephanWagner/svgMap@v2.5.2/dist/svgMap.min.js"></script>
 
 <script src="./dist/bundle.js"></script>
-
-<script>
-    function changeDomain() {
-        let p = prompt('New Hostname');
-        location.search = `?host=${ p.toLowerCase() }`;
-    }
-</script>
 
 <script src="a.js?v5"></script>
 </body>
