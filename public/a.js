@@ -9,12 +9,16 @@
     function pageview() {
         if (location.pathname === lastPathname) return;
 
-        var viewCount = 1, sessionTime = 0;
+        var visitCount = 0, viewCount = 1, sessionTime = 0, isNew = 1;
 
         try {
+            visitCount = (parseInt(localStorage.getItem('_implausible_visits')) || 0);
             sessionTime = (parseInt(sessionStorage.getItem('_sessionTime')) || 1);
             viewCount = (parseInt(sessionStorage.getItem('_viewCount')) || 0);
             sessionStorage.setItem('_viewCount', ++viewCount);
+            if (visitCount) isNew = 0;
+
+            localStorage.setItem('_implausible_visits', ++visitCount);
         } catch(e){}
 
         var loadTime = ((window.performance.timing.domContentLoadedEventEnd - window.performance.timing.navigationStart) / 1000).toFixed(2);
@@ -25,7 +29,7 @@
         var lang = navigator.language || navigator.languages[0] || '';
         var img = document.createElement("img");
 
-        var url = `https://unsimple.b-cdn.net/o.png?host=${ encodeURIComponent(host) }&referrer=${ encodeURIComponent(referrer) }&href=${ encodeURIComponent(href) }&width=${ width }&bot=${ isBot ? 1 : 0 }&headless=${ isHeadless ? 1 : 0 }&load=${ loadTime }&views=${ viewCount }&time=${ sessionTime }&lang=${ lang }&v=${ rand }`;
+        var url = `https://unsimple.b-cdn.net/o.png?host=${ encodeURIComponent(host) }&referrer=${ encodeURIComponent(referrer) }&href=${ encodeURIComponent(href) }&width=${ width }&bot=${ isBot ? 1 : 0 }&headless=${ isHeadless ? 1 : 0 }&load=${ loadTime }&views=${ viewCount }&time=${ sessionTime }&lang=${ lang }&new=${ isNew }&v=${ rand }`;
         lastPathname = location.pathname;
         img.src = url;
 
