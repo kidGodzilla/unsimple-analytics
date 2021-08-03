@@ -253,12 +253,13 @@ async function load() {
     });
     renderCharts();
 
-    function fmtMSS(s) { return(s-(s%=60))/60+(9<s?':':':0')+s }
+    function fmtMSS(s) { return(s-(s%=60))/60+('m ')+s }
+    avgSessionLength = parseFloat(avgSessionLength.toFixed(2));
 
     // Pageviews, Visitors, Bounce Rate, Duration
     $('.visitors').textContent = visitors.length;
     $('.pageviews').textContent = pageviews;
-    $('.duration').textContent = avgSessionLength ? fmtMSS(avgSessionLength) + 's' : '-';
+    $('.duration').textContent = avgSessionLength ? (avgSessionLength < 60 ? avgSessionLength : fmtMSS(avgSessionLength)) + 's' : '-';
     $('.bounced').textContent = (bounceRate ? (bounceRate * 100).toFixed(2) : 0) + '%';
   }
 
