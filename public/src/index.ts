@@ -239,14 +239,15 @@ async function load() {
       // @ts-ignore
       new svgMap({
         targetElementID: 'svgMap',
+        colorMax: '#3459E6',
+        colorMin: '#c7d2fc',
+        colorNoData: '#E2E2E2',
         data: {
           data: {
             visitors: {
               name: 'visitors',
               format: '{0}',
-              thousandSeparator: ',',
-              // thresholdMax: 50000,
-              // thresholdMin: 1000
+              thousandSeparator: ','
             }
           },
           applyData: 'visitors',
