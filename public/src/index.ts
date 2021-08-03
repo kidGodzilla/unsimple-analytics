@@ -118,7 +118,7 @@ async function load() {
 
     result.forEach(item => {
       let d = new Date(item.ts * 1000);
-      let h = d.getHours();
+      let h = d.getUTCHours();
 
       // Aggregate
       incr(map, hourly ? h : isoDate(d));
