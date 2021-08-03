@@ -55,7 +55,7 @@ stmt = db.prepare(`CREATE TABLE IF NOT EXISTS visits (
     pageviews INTEGER,
     load_time REAL,
     lang TEXT,
-    pull_zone_id TEXT
+    edge_location TEXT
 )`);
 
 stmt.run();
@@ -90,7 +90,7 @@ const insert = db.prepare(`INSERT OR IGNORE INTO visits (
     pageviews,
     load_time,
     lang,
-    pull_zone_id
+    edge_location
 ) VALUES (
     @unique_request_id, 
     @iso_date,
@@ -116,7 +116,7 @@ const insert = db.prepare(`INSERT OR IGNORE INTO visits (
     @pageviews,
     @load_time,
     @lang,
-    @pull_zone_id
+    @edge_location
 )`);
 
 // Insert one or many function
@@ -254,6 +254,7 @@ function parseLogs (logs) {
         if (!out.lang) out.lang = '';
         if (!out.bot) out.bot = 0;
 
+        delete out.pull_zone_id;
         delete out.cache_status;
         delete out.user_agent;
         delete out.bytes_sent;
