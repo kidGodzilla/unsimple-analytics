@@ -284,8 +284,9 @@ function getLogs(D, callback) {
 
     if (process.env.PULL_ZONE_ID && process.env.ACCESS_KEY && iso_date) {
         console.log(`Downloading (${ iso_date }) log data from Bunny CDN`);
+        let rand = (Math.random() + 1).toString(36).substring(5);
 
-        request.get(`https://logging.bunnycdn.com/${ iso_date }/${ process.env.PULL_ZONE_ID }.log`)
+        request.get(`https://logging.bunnycdn.com/${ iso_date }/${ process.env.PULL_ZONE_ID }.log?v=${ rand }`)
             .set('AccessKey', process.env.ACCESS_KEY)
             .set('accept', 'json')
             .end((err, res) => {
