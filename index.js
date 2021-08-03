@@ -272,21 +272,34 @@ function parseLogs (logs) {
 // Parse the example logs
 // parseLogs(logs);
 
+// Get logs based on a date object
+function getLogs(D, callback) {
+    if (!D) return;
+
+    if (typeof D === 'string') D = new Date(D);
+
+    let iso_date = `${ D.toISOString().slice(5, 10) }-${ D.toISOString().slice(2, 4) }`;
+
+    if (process.env.PULL_ZONE_ID && process.env.ACCESS_KEY && iso_date) {
+        console.log(`Downloading (${ iso_date }) log data from Bunny CDN`);
+
+        request.get(`https://logging.bunnycdn.com/${ iso_date }/${ process.env.PULL_ZONE_ID }.log`)
+            .set('AccessKey', process.env.ACCESS_KEY)
+            .set('accept', 'json')
+            .end((err, res) => {
+                console.log(`Parsing ${ iso_date } logs & Updating Database`);
+                parseLogs(res.text);
+
+                if (callback && typeof callback === 'function') callback();
+            });
+    }
+}
+
 // Fetch today's logs from Bunny CDN
-const D = new Date();
-let iso_date = `${ D.toISOString().slice(5, 10) }-${ D.toISOString().slice(2, 4) }`;
+let D = new Date(), yesterday = new Date();
+yesterday.setDate(yesterday.getDate() - 1);
 // if (drop) iso_date = '07-31-21';
 // iso_date = '08-01-21';
 // iso_date = '08-02-21';
 
-if (process.env.PULL_ZONE_ID && process.env.ACCESS_KEY && iso_date) {
-    console.log(`Downloading (${ iso_date }) log data from Bunny CDN`);
-
-    request.get(`https://logging.bunnycdn.com/${ iso_date }/${ process.env.PULL_ZONE_ID }.log`)
-        .set('AccessKey', process.env.ACCESS_KEY)
-        .set('accept', 'json')
-        .end((err, res) => {
-            console.log(`Parsing ${ iso_date } logs & Updating Database`);
-            parseLogs(res.text);
-        });
-}
+getLogs(D, () => getLogs(yesterday));
