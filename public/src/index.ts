@@ -119,7 +119,7 @@ async function load() {
     }
 
     // Construct directed graph
-    let nodes = [], usedNodes = [] as any, sessions = {}, links = {}, idLookup = {} as any, linkArray = [] as any;
+    let nodes = [], usedNodes = [] as any, sessions = {}, links = {}, idLookup = {} as any, linkArray = [] as any, linkRows = [] as any;
 
     result.forEach(item => {
       let d = new Date(item.ts * 1000);
@@ -205,16 +205,18 @@ async function load() {
     console.log('Accumulated');
 
     // Create directed graph
-    // linkArray
     for (let j in links) {
       let o = links[j];
 
       for (let k in o) {
-        if (j != k) linkArray.push({ source: idLookup[j], target: idLookup[k], value: o[k] });
+        if (j != k) {
+          linkArray.push({ source: idLookup[j], target: idLookup[k], value: o[k] });
+          linkRows.push([ j, k, o[k] ]);
+        }
       }
     }
 
-    console.log('dg', nodes, linkArray);
+    console.log('dg', nodes, linkArray, linkRows);
 
     // Calculate average session duration
     let avgSessionLength = 0, counter = 0;
@@ -314,44 +316,62 @@ async function load() {
       });
 
       if (linkArray.length > 1) {
-        console.log('sankey-ing', nodes, linkArray);
+        console.log('sankey-ing', nodes, linkArray, linkRows);
 
         // @ts-ignore
-        var d3 = window.d3, objSankey = window.objSankey = sk.createSankey('#sankeyChart', {
-          margin: { top: 10, left: 0, right: 0, bottom: 0 },
-          nodes: {
-            dynamicSizeFontNode: {
-              enabled: true,
-              minSize: 14,
-              maxSize: 30
-            },
-            fontSize: 14, // if dynamicSizeFontNode not enabled
-            draggableX: false, // default [ false ]
-            draggableY: true, // default [ true ]
-            colors: d3.scaleOrdinal(d3.schemeCategory10)
-          },
-          links: {
-            formatValue: function(val) {
-              return d3.format(",.0f")(val) + ' user(s)';
-            },
-            unit: 'user(s)' // if not set formatValue function
-          },
-          tooltip: {
-            infoDiv: true,  // if false display default tooltip
-            labelSource: 'Input:',
-            labelTarget: 'Output:'
-          }
-        }, {
-          nodes: nodes || [
-            {id: 0, name: "Alice", color: "green"},
-            {id: 1, name: "Bob", color: "yellow"},
-            {id: 2, name: "Carol", color: "blue"}
-          ],
-          links: linkArray || [
-            {source: 0, target: 1, value: 1},
-            {source: 1, target: 2, value: 1}
-          ]
-        });
+        google.charts.load("current", {packages:["sankey"]});
+        // @ts-ignore
+        google.charts.setOnLoadCallback(drawChart);
+        function drawChart() {
+          // @ts-ignore
+          var data = new google.visualization.DataTable();
+          data.addColumn('string', 'From');
+          data.addColumn('string', 'To');
+          data.addColumn('number', 'User(s)');
+          data.addRows(linkRows);
+
+          // Instantiate and draw our chart, passing in some options.
+          // @ts-ignore
+          var chart = new google.visualization.Sankey(document.getElementById('sankey_multiple'));
+          chart.draw(data);
+        }
+
+        // @ts-ignore
+        // var d3 = window.d3, objSankey = window.objSankey = sk.createSankey('#sankeyChart', {
+        //   margin: { top: 10, left: 0, right: 0, bottom: 0 },
+        //   nodes: {
+        //     dynamicSizeFontNode: {
+        //       enabled: true,
+        //       minSize: 14,
+        //       maxSize: 30
+        //     },
+        //     fontSize: 14, // if dynamicSizeFontNode not enabled
+        //     draggableX: false, // default [ false ]
+        //     draggableY: true, // default [ true ]
+        //     colors: d3.scaleOrdinal(d3.schemeCategory10)
+        //   },
+        //   links: {
+        //     formatValue: function(val) {
+        //       return d3.format(",.0f")(val) + ' user(s)';
+        //     },
+        //     unit: 'user(s)' // if not set formatValue function
+        //   },
+        //   tooltip: {
+        //     infoDiv: true,  // if false display default tooltip
+        //     labelSource: 'Input:',
+        //     labelTarget: 'Output:'
+        //   }
+        // }, {
+        //   nodes: nodes || [
+        //     {id: 0, name: "Alice", color: "green"},
+        //     {id: 1, name: "Bob", color: "yellow"},
+        //     {id: 2, name: "Carol", color: "blue"}
+        //   ],
+        //   links: linkArray || [
+        //     {source: 0, target: 1, value: 1},
+        //     {source: 1, target: 2, value: 1}
+        //   ]
+        // });
 
         $('.userflow').classList.remove('d-none');
       } else {
