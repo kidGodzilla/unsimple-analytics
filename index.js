@@ -277,6 +277,7 @@ const D = new Date();
 let iso_date = `${ D.toISOString().slice(5, 10) }-${ D.toISOString().slice(2, 4) }`;
 // if (drop) iso_date = '07-31-21';
 // iso_date = '08-01-21';
+// iso_date = '08-02-21';
 
 if (process.env.PULL_ZONE_ID && process.env.ACCESS_KEY && iso_date) {
     console.log(`Downloading (${ iso_date }) log data from Bunny CDN`);
