@@ -298,8 +298,6 @@ function getLogs(D, callback) {
 // Fetch today's logs from Bunny CDN
 let D = new Date(), yesterday = new Date();
 yesterday.setDate(yesterday.getDate() - 1);
-// if (drop) iso_date = '07-31-21';
-// iso_date = '08-01-21';
-// iso_date = '08-02-21';
 
+// getLogs(D, () => getLogs(yesterday, () => getLogs('08-01-21', () => getLogs('07-31-21'))));
 getLogs(D, () => getLogs(yesterday));
