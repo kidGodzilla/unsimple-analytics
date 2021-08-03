@@ -80,7 +80,8 @@ async function load() {
     let hourly = Math.floor(start / 10000) === Math.floor(end / 10000);
     // console.log(statement, hourly, start, end);
 
-    const result = await worker.db.query(statement);
+    let result = await worker.db.query(statement);
+    result = result.sort((a, b) => a.ts > b.ts && 1 || -1);
     // console.log('result', result);
 
     // Cleanup Loading Spinners / previous output
@@ -117,6 +118,9 @@ async function load() {
       o[k]++;
     }
 
+    // Construct directed graph
+    let nodes = [], usedNodes = [] as any, sessions = {}, links = {}, idLookup = {} as any, linkArray = [] as any;
+
     result.forEach(item => {
       let d = new Date(item.ts * 1000);
       let h = d.getUTCHours();
@@ -145,6 +149,12 @@ async function load() {
       // Pathnames
       incr(pathnames, item.pathname);
 
+      // Nodes, sessions, and Links
+      // @ts-ignore
+      if (!nodes.includes(item.pathname)) nodes.push(item.pathname);
+      if (!sessions[item.ip]) sessions[item.ip] = [];
+      sessions[item.ip].push(item.pathname);
+
       // Session length
       if (item.session_length && (!maxSessionLength[item.ip] || maxSessionLength[item.ip] < item.session_length))
         maxSessionLength[item.ip] = item.session_length;
@@ -162,6 +172,49 @@ async function load() {
       if (!visitors.includes(item.ip)) visitors.push(item.ip);
       pageviews++;
     });
+
+    // Format sankey nodes
+    let nodes2 = [] as any;
+    nodes.forEach((node, i) => {
+      nodes2.push({ id: i, name: node, color: "green" });
+      idLookup[node] = i;
+    });
+    nodes = nodes2;
+
+    // Accumulate connections
+    for (let ip in sessions) {
+      let session = sessions[ip], current, previous;
+
+      if (session.length) {
+        while(session.length) {
+          current = session.shift();
+
+          if (previous && current && !usedNodes.includes(current)) {
+            console.log('link', previous, current);
+
+            if (!links[previous]) links[previous] = {};
+            if (!links[previous][current]) links[previous][current] = 0;
+            links[previous][current]++;
+            usedNodes.push(current);
+          }
+
+          previous = current;
+        }
+      }
+    }
+    console.log('Accumulated');
+
+    // Create directed graph
+    // linkArray
+    for (let j in links) {
+      let o = links[j];
+
+      for (let k in o) {
+        if (j != k) linkArray.push({ source: idLookup[j], target: idLookup[k], value: o[k] });
+      }
+    }
+
+    console.log('dg', nodes, linkArray);
 
     // Calculate average session duration
     let avgSessionLength = 0, counter = 0;
@@ -195,7 +248,7 @@ async function load() {
       }
     }
 
-    console.log(map, data, edges, referrers, browsers, pathnames, os, types, languages, pageviews, visitors.length);
+    // console.log(map, data, edges, referrers, browsers, pathnames, os, types, languages, pageviews, visitors.length);
 
     $('.referrers').innerHTML = tableFragment(referrers, s => s ? `<img src="https://logo.clearbit.com/${ s }" onerror="this.onerror=null; this.src='default.png';">&nbsp;<a class="d-inline-block text-truncate" href="http://${ s }" target="_blank">${ s }</a>` : 'Direct / None');
     $('.pages').innerHTML = tableFragment(pathnames, s => `<a class="d-inline-block text-truncate" href="http://${ host }${ s }" target="_blank">${ s }</a>`);
@@ -259,6 +312,51 @@ async function load() {
           }
         }
       });
+
+      if (linkArray.length > 1) {
+        console.log('sankey-ing', nodes, linkArray);
+
+        // @ts-ignore
+        var d3 = window.d3, objSankey = window.objSankey = sk.createSankey('#sankeyChart', {
+          margin: { top: 10, left: 0, right: 0, bottom: 0 },
+          nodes: {
+            dynamicSizeFontNode: {
+              enabled: true,
+              minSize: 14,
+              maxSize: 30
+            },
+            fontSize: 14, // if dynamicSizeFontNode not enabled
+            draggableX: false, // default [ false ]
+            draggableY: true, // default [ true ]
+            colors: d3.scaleOrdinal(d3.schemeCategory10)
+          },
+          links: {
+            formatValue: function(val) {
+              return d3.format(",.0f")(val) + ' user(s)';
+            },
+            unit: 'user(s)' // if not set formatValue function
+          },
+          tooltip: {
+            infoDiv: true,  // if false display default tooltip
+            labelSource: 'Input:',
+            labelTarget: 'Output:'
+          }
+        }, {
+          nodes: nodes || [
+            {id: 0, name: "Alice", color: "green"},
+            {id: 1, name: "Bob", color: "yellow"},
+            {id: 2, name: "Carol", color: "blue"}
+          ],
+          links: linkArray || [
+            {source: 0, target: 1, value: 1},
+            {source: 1, target: 2, value: 1}
+          ]
+        });
+
+        $('.userflow').classList.remove('d-none');
+      } else {
+        $('.userflow').classList.add('d-none');
+      }
     }
 
     window.addEventListener('resize', () => {
