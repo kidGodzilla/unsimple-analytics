@@ -72,7 +72,7 @@ async function load() {
 
   async function render(start, end) {
     let host = new URLSearchParams(window.location.search).get('host') || 'analytics.serv.rs';
-    if (host.indexOf('www.') === 0) host = host.replace('www.', '');
+    if (host.indexOf('www.') === 0) host = host.replace('www.', '').toLowerCase();
     $('h5.name').textContent = capitalize(host);
 
     let statement = `SELECT * FROM visits WHERE host = '${ host }' AND date BETWEEN '${ isoDate(start) }' AND '${ isoDate(end) }'`;
@@ -80,6 +80,7 @@ async function load() {
     // console.log(statement, hourly, start, end);
 
     const result = await worker.db.query(statement);
+    // console.log('result', result);
 
     // Cleanup Loading Spinners / previous output
     $('.languages').innerHTML = '';
@@ -103,6 +104,7 @@ async function load() {
     let pageviews = 0;
     let visitors = [];
     let browsers = {};
+    let edges = {};
     let types = {};
     let map = {};
     let os = {};
@@ -129,6 +131,9 @@ async function load() {
 
       // OS
       incr(os, item.os);
+
+      // Edge Locations
+      incr(edges, item.edge_location);
 
       // Browser
       incr(browsers, item.browser);
@@ -189,7 +194,7 @@ async function load() {
       }
     }
 
-    // console.log(map, data, referrers, browsers, pathnames, os, types, pageviews, visitors.length);
+    console.log(map, data, edges, referrers, browsers, pathnames, os, types, languages, pageviews, visitors.length);
 
     $('.referrers').innerHTML = tableFragment(referrers, s => s ? `<img src="https://logo.clearbit.com/${ s }" onerror="this.onerror=null; this.src='default.png';">&nbsp;<a href="http://${ s }" target="_blank">${ s }</a>` : 'Direct / None');
     $('.pages').innerHTML = tableFragment(pathnames, s => `<a href="http://${ host }${ s }" target="_blank">${ s }</a>`);
