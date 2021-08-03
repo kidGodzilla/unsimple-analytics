@@ -287,9 +287,9 @@ async function load() {
   res.forEach(item => domains.push(item.host));
   domains.sort();
 
-  domains.forEach(domain => {
+  domains.forEach((domain, i) => {
     // @ts-ignore
-    if (!domain.includes('meetingroom365')) fragment += `<a class="dropdown-item cp" href="?host=${ domain }">${ capitalize(domain) }</a>`;
+    if (!domain.includes('meetingroom365') && i < 14) fragment += `<a class="dropdown-item cp" href="?host=${ domain }">${ capitalize(domain) }</a>`;
   });
 
   fragment += `<a class="dropdown-item cp" onclick="changeDomain()">Custom Domain</a>`;
