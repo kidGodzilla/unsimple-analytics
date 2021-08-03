@@ -24,7 +24,8 @@
         .nav-tabs { font-size: 12px }
         .nav-tabs .nav-link { padding-top: 0.5rem; padding-bottom: 0.5rem }
         .spinme { display:block; margin: 0 auto; position: relative; top: 125px }
-        .dropdown-menu.show { z-index: 99999 !important; transform: translate3d(-50px, 42px, 0px) !important }
+        .dropdown-menu.right.show { z-index: 99999 !important; transform: translate3d(-50px, 42px, 0px) !important }
+        .dropdown-menu.left.show { z-index: 99999 !important; transform: translate3d(25px, 42px, 0px) !important }
         .dot { margin-left: 16px; margin-right: 4px; transform-origin: center center; transform: scale(4) translateY(-0.85px) }
 
         .shaded img { max-height: 18px; margin-top: -4px }
@@ -53,14 +54,14 @@
 
         <div class="collapse navbar-collapse" id="navbarColor01">
             <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    <a class="nav-link cp active" href="/">Home
-                        <span class="visually-hidden">(current)</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link cp" onclick="changeDomain()">Change Domain</a>
-                </li>
+<!--                <li class="nav-item">-->
+<!--                    <a class="nav-link cp active" href="/">Home-->
+<!--                        <span class="visually-hidden">(current)</span>-->
+<!--                    </a>-->
+<!--                </li>-->
+<!--                <li class="nav-item">-->
+<!--                    <a class="nav-link cp" onclick="changeDomain()">Change Domain</a>-->
+<!--                </li>-->
             </ul>
         </div>
     </div>
@@ -70,7 +71,20 @@
 
     <div class="row">
         <div class="col-6">
-            <h5 class="d-inline pt-2 mb-0 name">Website.name</h5>
+
+
+            <ul class="nav nav-pills mb-1 d-inline-block">
+                <li class="nav-item dropdown ms-auto">
+                    <a class="nav-link dropdown-toggle cp" data-bs-toggle="dropdown" role="button">
+                        <h5 class="d-inline pt-2 mb-0 name">Website.name</h5>
+                    </a>
+
+                    <div class="dropdown-menu websites left">
+                        <a class="dropdown-item cp" href="?host=analytics.serv.rs">Analytics.serv.rs</a>
+                        <a class="dropdown-item cp" href="?host=jamesfuthey.com">Jamesfuthey.com</a>
+                    </div>
+                </li>
+            </ul>
 
             <span class="text-success d-none d-md-inline-block dot">·</span>
             <span class="current-visitors d-none d-md-inline-block">No current visitors</span>
@@ -79,7 +93,7 @@
             <ul class="nav nav-pills mb-1">
                 <li class="nav-item dropdown ms-auto">
                     <a class="nav-link dropdown-toggle cp" data-bs-toggle="dropdown" role="button">Latest</a>
-                    <div class="dropdown-menu">
+                    <div class="dropdown-menu right">
                         <a class="dropdown-item cp" onclick="render(daysAgo(0), daysAgo(0)); $('.dropdown-toggle').text(this.textContent)">Latest</a>
                         <a class="dropdown-item cp" onclick="render(daysAgo(1), daysAgo(1)); $('.dropdown-toggle').text(this.textContent)">Yesterday</a>
                         <div class="dropdown-divider"></div>

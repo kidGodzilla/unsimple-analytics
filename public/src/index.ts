@@ -25,6 +25,7 @@ async function load() {
   function $(selector) {
     return document.querySelector(selector) || {}
   }
+
   function capitalize(s) {
     return s.charAt(0).toUpperCase() + s.slice(1)
   }
@@ -263,6 +264,7 @@ async function load() {
     window.addEventListener('resize', () => {
       setTimeout(renderCharts, 555)
     });
+
     renderCharts();
 
     function fmtMSS(s) { return(s-(s%=60))/60+('m ')+parseInt(s) }
@@ -277,6 +279,22 @@ async function load() {
 
   // Start by rendering yesterday's data
   render(daysAgo(0), daysAgo(0));
+
+  // Get alternate domains
+  let res = await worker.db.query(`SELECT DISTINCT host FROM visits`), domains = [], fragment = '';
+
+  // @ts-ignore
+  res.forEach(item => domains.push(item.host));
+  domains.sort();
+
+  domains.forEach(domain => {
+    // @ts-ignore
+    if (!domain.includes('meetingroom365')) fragment += `<a class="dropdown-item cp" href="?host=${ domain }">${ capitalize(domain) }</a>`;
+  });
+
+  fragment += `<a class="dropdown-item cp" onclick="changeDomain()">Custom Domain</a>`;
+  $('.websites').innerHTML = fragment;
+
 
   // @ts-ignore
   window.daysAgo = daysAgo;
