@@ -208,7 +208,7 @@ async function load() {
       $('#visits').innerHTML = '';
 
       // @ts-ignore
-      new Morris.Line({
+      new Morris.Area({
         // ID of the element in which to draw the chart.
         element: 'visits',
         // Chart data records -- each entry in this array corresponds to a point on
@@ -222,11 +222,17 @@ async function load() {
         ],
         // The name of the data record attribute that contains x-values.
         xkey: 'hour',
+        xLabels: hourly ? 'hour' : 'day',
+        // dateFormat: function (x) { return new Date(x).toString() },
         // A list of names of data record attributes that contain y-values.
         ykeys: ['value'],
         // Labels for the ykeys -- will be displayed when you hover over the
         // chart.
-        labels: ['Visits']
+        labels: ['Visits'],
+        lineWidth: 4,
+        pointSize: 5,
+        fillOpacity: 0.2,
+        // smooth: false
       });
 
       // SVG Map
