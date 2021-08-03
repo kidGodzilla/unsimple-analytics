@@ -264,7 +264,7 @@ async function load() {
     });
     renderCharts();
 
-    function fmtMSS(s) { return(s-(s%=60))/60+('m ')+s }
+    function fmtMSS(s) { return(s-(s%=60))/60+('m ')+parseInt(s) }
     avgSessionLength = parseFloat(avgSessionLength.toFixed(2));
 
     // Pageviews, Visitors, Bounce Rate, Duration
