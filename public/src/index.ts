@@ -181,6 +181,20 @@ async function load() {
     });
     nodes = nodes2;
 
+    // Remove repeating duplicates
+    for (let ip in sessions) {
+      let session = sessions[ip], reduced = [] as any, last;
+
+      session.forEach(item => {
+        if (last !== item) reduced.push(item);
+        last = item;
+      });
+
+      sessions[ip] = reduced;
+    }
+
+    console.log('sessions', JSON.parse(JSON.stringify(sessions)));
+
     // Accumulate connections
     for (let ip in sessions) {
       let session = sessions[ip], current, previous;
@@ -190,7 +204,7 @@ async function load() {
           current = session.shift();
 
           if (previous && current && !usedNodes.includes(current)) {
-            console.log('link', previous, current);
+            // console.log('link', previous, current);
 
             if (!links[previous]) links[previous] = {};
             if (!links[previous][current]) links[previous][current] = 0;
@@ -202,7 +216,6 @@ async function load() {
         }
       }
     }
-    console.log('Accumulated');
 
     // Create directed graph
     for (let j in links) {
@@ -216,7 +229,7 @@ async function load() {
       }
     }
 
-    console.log('dg', nodes, linkArray, linkRows);
+    // console.log('dg', nodes, linkArray, linkRows);
 
     // Calculate average session duration
     let avgSessionLength = 0, counter = 0;
@@ -316,7 +329,7 @@ async function load() {
       });
 
       if (linkArray.length > 1) {
-        console.log('sankey-ing', nodes, linkArray, linkRows);
+        // console.log('sankey-ing', nodes, linkArray, linkRows);
 
         // @ts-ignore
         google.charts.load("current", {packages:["sankey"]});
