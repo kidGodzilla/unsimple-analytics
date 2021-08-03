@@ -54,7 +54,8 @@ stmt = db.prepare(`CREATE TABLE IF NOT EXISTS visits (
     session_length REAL,
     pageviews INTEGER,
     load_time REAL,
-    lang TEXT
+    lang TEXT,
+    pull_zone_id TEXT
 )`);
 
 stmt.run();
@@ -88,7 +89,8 @@ const insert = db.prepare(`INSERT OR IGNORE INTO visits (
     session_length,
     pageviews,
     load_time,
-    lang
+    lang,
+    pull_zone_id
 ) VALUES (
     @unique_request_id, 
     @iso_date,
@@ -113,7 +115,8 @@ const insert = db.prepare(`INSERT OR IGNORE INTO visits (
     @session_length,
     @pageviews,
     @load_time,
-    @lang
+    @lang,
+    @pull_zone_id
 )`);
 
 // Insert one or many function
@@ -243,6 +246,7 @@ function parseLogs (logs) {
 
         if (!out.session_length) out.session_length = 0;
         if (!out.referer_host) out.referer_host = '';
+        out.status_code = parseInt(out.status_code);
         if (!out.pageviews) out.pageviews = 0;
         if (!out.load_time) out.load_time = 0;
         if (!out.headless) out.headless = 0;
@@ -250,10 +254,7 @@ function parseLogs (logs) {
         if (!out.lang) out.lang = '';
         if (!out.bot) out.bot = 0;
 
-        out.status_code = parseInt(out.status_code);
-        // delete out.unique_request_id;
         delete out.cache_status;
-        delete out.pull_zone_id;
         delete out.user_agent;
         delete out.bytes_sent;
 
@@ -299,5 +300,5 @@ function getLogs(D, callback) {
 let D = new Date(), yesterday = new Date();
 yesterday.setDate(yesterday.getDate() - 1);
 
-// getLogs(D, () => getLogs(yesterday, () => getLogs('08-01-21', () => getLogs('07-31-21'))));
-getLogs(D, () => getLogs(yesterday));
+if (drop) getLogs(D, () => getLogs(yesterday, () => getLogs('08-01-21', () => getLogs('07-31-21'))));
+else getLogs(D, () => getLogs(yesterday));
