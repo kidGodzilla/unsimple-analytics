@@ -65,6 +65,9 @@
 <!--                <li class="nav-item">-->
 <!--                    <a class="nav-link cp" onclick="changeDomain()">Change Domain</a>-->
 <!--                </li>-->
+                <li class="nav-item">
+                    <a class="nav-link cp" data-bs-toggle="modal" data-bs-target="#embedScript">Add to your Website</a>
+                </li>
             </ul>
         </div>
     </div>
@@ -284,6 +287,31 @@
     <a href="https://github.com/kidGodzilla/unsimple-analytics" target="_blank" class="" aria-label="View source on GitHub">View source on GitHub</a>
 </p>
 
+<div class="modal" id="embedScript" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add to your Website</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Embed this script on your website, and your data will appear here (publicly).</p>
+                <p>
+                    <textarea rows="1" class="form-control" id="script" data-clipboard-target="#script">&lt;script src="https://analytics.serv.rs/a.js">&lt;/script></textarea>
+                    <small class="d-block mt-1">
+                        <a class="cp" data-clipboard-target="#script">Copy to clipboard</a>
+                        <span class="d-none">&nbsp;Copied!</span>
+                    </small>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
 <script>window.jQuery || document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-compat/3.0.0-alpha1/jquery.js"><\/script>')</script>
 
@@ -324,11 +352,22 @@
 
 <script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/StephanWagner/svgMap@v2.5.2/dist/svgMap.min.js"></script>
-
-<script src="https://www.gstatic.com/charts/loader.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js"></script>
 <!--<script src="https://unpkg.com/d3@4.10.2/build/d3.min.js"></script>-->
 <!--<script src="https://unpkg.com/skd3/build/sk.d3.min.js"></script>-->
+<script src="https://www.gstatic.com/charts/loader.js"></script>
+
+<script>
+    var text = $('<textarea />').html(`&lt;script src="${ location.protocol }//${ location.host }/a.js">&lt;/script>`).text();
+    $('#script').val(text);
+
+    var clippy = new ClipboardJS('#embedScript a, #script');
+
+    clippy.on('success', function(e) {
+        $('#embedScript span').removeClass('d-none');
+        setTimeout(function () { $('#embedScript span').addClass('d-none') }, 3456);
+    });
+</script>
 
 <script src="./dist/bundle.js"></script>
 
