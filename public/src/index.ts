@@ -308,6 +308,7 @@ async function load() {
     $('.os').innerHTML = tableFragment(os);
 
     function renderCharts() {
+      $('#sankey_multiple').innerHTML = '';
       $('#svgMap').innerHTML = '';
       $('#visits').innerHTML = '';
 
