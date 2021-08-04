@@ -95,11 +95,11 @@
                 <li class="nav-item dropdown ms-auto">
                     <a class="nav-link dropdown-toggle right cp" data-bs-toggle="dropdown" role="button">Latest</a>
                     <div class="dropdown-menu right">
-                        <a class="dropdown-item cp" onclick="render(daysAgo(0), daysAgo(0)); $('.dropdown-toggle.right').text(this.textContent)">Latest</a>
-                        <a class="dropdown-item cp" onclick="render(daysAgo(1), daysAgo(1)); $('.dropdown-toggle.right').text(this.textContent)">Yesterday</a>
+                        <a class="dropdown-item cp" onclick="setRange(1)">Latest</a>
+                        <a class="dropdown-item cp" onclick="setRange(-1)">Yesterday</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item cp" onclick="render(daysAgo(7), daysAgo(0)); $('.dropdown-toggle.right').text(this.textContent)">Last 7 Days</a>
-                        <a class="dropdown-item cp" onclick="render(daysAgo(30), daysAgo(0)); $('.dropdown-toggle.right').text(this.textContent)">Last 30 Days</a>
+                        <a class="dropdown-item cp" onclick="setRange(7)">Last 7 Days</a>
+                        <a class="dropdown-item cp" onclick="setRange(30)">Last 30 Days</a>
                     </div>
                 </li>
             </ul>
@@ -278,7 +278,7 @@
 </div>
 
 <p class="text-center">
-    Copyright &copy; 2021 <a href="https://jamesfuthey.com/" target="_blank">James Futhey</a>.
+    Copyright &copy; <span class="year">2021</span> <a href="https://jamesfuthey.com/" target="_blank">James Futhey</a>.
     All Rights Reserved.
     <a href="https://github.com/kidGodzilla/unsimple-analytics" target="_blank" class="" aria-label="View source on GitHub">View source on GitHub</a>
 </p>
@@ -287,6 +287,19 @@
 <script>window.jQuery || document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-compat/3.0.0-alpha1/jquery.js"><\/script>')</script>
 
 <script>
+    var ranges = {
+        '-1': ['Yesterday', 1, 1],
+        '1': ['Latest', 0, 0],
+        '7': ['Last 7 Days', 7, 0],
+        '30': ['Last 30 Days', 30, 0]
+    };
+
+    function setRange(n) {
+        var host = new URLSearchParams(window.location.search).get('host') || 'analytics.serv.rs';
+
+        location.href = `?host=${ host }&range=${ n }`;
+    }
+
     function changeDomain() {
         let p = prompt('New Hostname');
         location.search = `?host=${ p.toLowerCase() }`;
@@ -299,6 +312,8 @@
     var host = new URLSearchParams(window.location.search).get('host') || 'analytics.serv.rs';
     if (host.indexOf('www.') === 0) host = host.replace('www.', '').toLowerCase();
     $('h5.name').text(capitalize(host));
+
+    $('.year').text(new Date().getFullYear());
 </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>

@@ -443,8 +443,14 @@ async function load() {
     $('.bounced').textContent = (bounceRate ? (bounceRate * 100).toFixed(2) : 0) + '%';
   }
 
-  // Start by rendering yesterday's data
-  render(daysAgo(0), daysAgo(0));
+  // Render data for selected time range
+  let range = new URLSearchParams(window.location.search).get('range') || 1;
+  // @ts-ignore
+  console.log(range, ranges[range]);
+  // @ts-ignore
+  render(daysAgo(ranges[range][1]), daysAgo(ranges[range][2]));
+  // @ts-ignore
+  $('.dropdown-toggle.right').textContent = ranges[range][0];
 
   // Get alternate domains
   let res = await worker.db.query(`SELECT DISTINCT host FROM visits`), domains = [], fragment = '';
