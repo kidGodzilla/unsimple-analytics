@@ -444,30 +444,34 @@ async function load() {
     $('.bounced').textContent = (bounceRate ? (bounceRate * 100).toFixed(2) : 0) + '%';
   }
 
-  // Render data for selected time range
-  let range = new URLSearchParams(window.location.search).get('range') || 1;
-  // @ts-ignore
-  console.log(range, ranges[range]);
-  // @ts-ignore
-  render(daysAgo(ranges[range][1]), daysAgo(ranges[range][2]));
-  // @ts-ignore
-  $('.dropdown-toggle.right').textContent = ranges[range][0];
+  // Render data for the currently-selected time range
+  function renderCurrentRange() {
+    let range = new URLSearchParams(window.location.search).get('range') || 1;
+    // @ts-ignore
+    let currentRange = ranges[range];
+    render(daysAgo(currentRange[1]), daysAgo(currentRange[2]));
+    $('.dropdown-toggle.right').textContent = currentRange[0];
+  }
 
-  // Get alternate domains
+  setInterval(renderCurrentRange, 15 * 60 * 1000); // 15 minute refresh interval
+  renderCurrentRange();
+
+  // Get alternate domains to build dropdown menu
   let res = await worker.db.query(`SELECT DISTINCT host FROM visits`), domains = [], fragment = '';
 
   // @ts-ignore
   res.forEach(item => domains.push(item.host));
   domains.sort();
 
+  // Build dropdown menu HTML fragment
   domains.forEach((domain, i) => {
     // @ts-ignore
     if (!domain.includes('meetingroom365') && i < 14) fragment += `<a class="dropdown-item cp" href="?host=${ domain }">${ capitalize(domain) }</a>`;
   });
 
+  // Render fragments
   fragment += `<a class="dropdown-item cp" onclick="changeDomain()">Custom Domain</a>`;
   $('.websites').innerHTML = fragment;
-
 
   // @ts-ignore
   window.daysAgo = daysAgo;
