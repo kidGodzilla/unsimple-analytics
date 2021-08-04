@@ -193,29 +193,64 @@ async function load() {
       sessions[ip] = reduced;
     }
 
-    console.log('sessions', JSON.parse(JSON.stringify(sessions)));
+    let sessions2 = JSON.parse(JSON.stringify(sessions));
+    // console.log('sessions', sessions2);
 
     // Accumulate connections
     for (let ip in sessions) {
       let session = sessions[ip], current, previous;
 
-      if (session.length) {
-        while(session.length) {
-          current = session.shift();
+      while(session.length) {
+        current = session.shift();
 
-          if (previous && current && !usedNodes.includes(current)) {
-            // console.log('link', previous, current);
+        if (previous && current && !usedNodes.includes(previous) && !usedNodes.includes(current)) {
+          // console.log('link', previous, current);
 
-            if (!links[previous]) links[previous] = {};
-            if (!links[previous][current]) links[previous][current] = 0;
-            links[previous][current]++;
-            usedNodes.push(current);
-          }
-
-          previous = current;
+          if (!links[previous]) links[previous] = {};
+          if (!links[previous][current]) links[previous][current] = 0;
+          links[previous][current]++;
+          usedNodes.push(current);
         }
+
+        previous = current;
       }
     }
+
+    // Accumulate connections (method 2)
+    let graph = [[] as any, [] as any, [] as any, [] as any, [] as any];
+    for (let ip in sessions2) {
+      let session = sessions2[ip], previous;
+
+      session.forEach((item, i) => {
+        if (previous && i <= 5) {
+          let link = `${ previous } ${ item }`;
+          graph[i-1].push(link);
+        }
+
+        previous = item;
+      });
+    }
+    // console.log('graph', graph);
+
+    // Create an alternate directed graph (method 2)
+    let graphLinks = [] as any, graph2 = {};
+
+    graph.forEach((graphItem, i) => {
+      graphItem.forEach((graphItem, j) => {
+        let p = graphItem.split(' ');
+        let ps = `Step ${ i+1 }: ${ p[0] }=Step ${ i+2 }: ${ p[1] }`;
+        if (!graph2[ps]) graph2[ps] = 0;
+        graph2[ps]++;
+      });
+    });
+
+    for (let k in graph2) {
+      let v = graph2[k];
+      let p = k.split('=');
+      graphLinks.push([ p[0], p[1], v ]);
+    }
+
+    // console.log('graphLinks', graph2, graphLinks);
 
     // Create directed graph
     for (let j in links) {
@@ -340,8 +375,8 @@ async function load() {
           var data = new google.visualization.DataTable();
           data.addColumn('string', 'From');
           data.addColumn('string', 'To');
-          data.addColumn('number', 'User(s)');
-          data.addRows(linkRows);
+          data.addColumn('number', 'Sessions');
+          data.addRows(graphLinks);
 
           // Instantiate and draw our chart, passing in some options.
           // @ts-ignore
