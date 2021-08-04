@@ -289,7 +289,7 @@ async function load() {
     if (hourly) {
       for (let i = 0; i < 23; i++) {
         // @ts-ignore
-        data.push({ hour: `${ isoDate(start) } ${ i }:00`, value: (map[i] || 0) });
+        data.push({ hour: `${ isoDate(start) }T${ i }:00Z`, value: (map[i] || 0) });
       }
     } else {
       for (let k in map) {
@@ -328,7 +328,7 @@ async function load() {
         // The name of the data record attribute that contains x-values.
         xkey: 'hour',
         xLabels: hourly ? 'hour' : 'day',
-        // dateFormat: function (x) { return new Date(x).toString() },
+        dateFormat: function (x) { return hourly ? new Date(x).toString() : new Date(x).toLocaleString().split(',')[0] },
         // A list of names of data record attributes that contain y-values.
         ykeys: ['value'],
         // Labels for the ykeys -- will be displayed when you hover over the
