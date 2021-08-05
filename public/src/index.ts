@@ -5,7 +5,7 @@ const wasmUrl = new URL("sql.js-httpvfs/dist/sql-wasm.wasm", import.meta.url);
 
 async function load() {
   let url = (location.hostname === 'localhost' ? `${ location.protocol }//${ location.host }/` : 'https://analytics.serv.rs/') + `analytics.sqlite3`;
-  url = 'https://implausible.b-cdn.net/analytics.sqlite3'; // Does not seem to support range requests (`Accept-Ranges: bytes` header missing)
+  // url = 'https://implausible.b-cdn.net/analytics.sqlite3'; // Does not seem to support range requests (`Accept-Ranges: bytes` header missing)
   // console.log('url', url);
 
   const worker = await createDbWorker(
