@@ -21,8 +21,8 @@
             viewCount = (parseInt(sessionStorage.getItem('_viewCount')) || 0);
             if (sessionCount) isNew = 0;
 
-            if (!viewCount) localStorage.setItem('_implausible_sessions', ++sessionCount);
-            sessionStorage.setItem('_viewCount', ++viewCount);
+            if (!viewCount && !name) localStorage.setItem('_implausible_sessions', ++sessionCount);
+            if (!name) sessionStorage.setItem('_viewCount', ++viewCount);
         } catch(e){}
 
         var loadTime = ((window.performance.timing.domContentLoadedEventEnd - window.performance.timing.navigationStart) / 1000).toFixed(2);
