@@ -59,6 +59,8 @@ function ready() {
                 if (parsed.query.headless) out.headless = parseInt(parsed.query.headless);
                 if (parsed.query.width) out.width = parseInt(parsed.query.width);
                 if (parsed.query.bot) out.bot = parseInt(parsed.query.bot);
+                if (parsed.query.event) out.event = parsed.query.event;
+                if (parsed.query.value) out.value = parsed.query.value;
                 if (parsed.query.lang) out.lang = parsed.query.lang;
                 if (parsed.query.href) parts[7] = parsed.query.href;
 
@@ -138,14 +140,17 @@ function ready() {
             if (!out.session_length) out.session_length = 0;
             if (!out.referer_host) out.referer_host = '';
             out.status_code = parseInt(out.status_code);
+            if (!out.event) out.event = 'pageview';
             if (!out.pageviews) out.pageviews = 0;
             if (!out.load_time) out.load_time = 0;
             if (!out.headless) out.headless = 0;
             if (!out.session) out.session = 0;
             if (!out.is_new) out.is_new = 0;
+            if (!out.value) out.value = '';
             if (!out.width) out.width = 0;
             if (!out.lang) out.lang = '';
             if (!out.bot) out.bot = 0;
+
 
             delete out.pull_zone_id;
             delete out.cache_status;
@@ -227,34 +232,36 @@ function ready() {
 
     // Create `visits` Table
     stmt = db.prepare(`CREATE TABLE IF NOT EXISTS visits (
-    id TEXT PRIMARY KEY,
-    date TEXT,
-    ts INTEGER,
-    ip TEXT,
-    protocol TEXT,
-    pathname TEXT,
-    host TEXT,
-    device_type TEXT,
-    device_family TEXT,
-    browser TEXT,
-    browser_major_version TEXT,
-    browser_minor_version TEXT,
-    os TEXT,
-    os_major_version TEXT,
-    os_minor_version TEXT,
-    country_code TEXT,
-    referer_host TEXT,
-    headless INTEGER,
-    bot INTEGER,
-    width INTEGER,
-    session_length REAL,
-    pageviews INTEGER,
-    load_time REAL,
-    lang TEXT,
-    edge_location TEXT,
-    session REAL,
-    is_new REAL
-)`);
+        id TEXT PRIMARY KEY,
+        date TEXT,
+        ts INTEGER,
+        ip TEXT,
+        event TEXT,
+        value TEXT,
+        protocol TEXT,
+        pathname TEXT,
+        host TEXT,
+        device_type TEXT,
+        device_family TEXT,
+        browser TEXT,
+        browser_major_version TEXT,
+        browser_minor_version TEXT,
+        os TEXT,
+        os_major_version TEXT,
+        os_minor_version TEXT,
+        country_code TEXT,
+        referer_host TEXT,
+        headless INTEGER,
+        bot INTEGER,
+        width INTEGER,
+        session_length REAL,
+        pageviews INTEGER,
+        load_time REAL,
+        lang TEXT,
+        edge_location TEXT,
+        session REAL,
+        is_new REAL
+    )`);
 
     stmt.run();
 
@@ -264,62 +271,66 @@ function ready() {
 
     // Insert via prepared statement
     const insert = db.prepare(`INSERT OR IGNORE INTO visits (
-    id, 
-    date, 
-    ts, 
-    ip, 
-    protocol, 
-    pathname, 
-    host, 
-    device_type, 
-    device_family, 
-    browser, 
-    browser_major_version, 
-    browser_minor_version, 
-    os, 
-    os_major_version, 
-    os_minor_version, 
-    country_code,
-    referer_host,
-    headless,
-    bot,
-    width,
-    session_length,
-    pageviews,
-    load_time,
-    lang,
-    edge_location,
-    session,
-    is_new
-) VALUES (
-    @unique_request_id, 
-    @iso_date,
-    @timestamp,
-    @remote_ip,
-    @protocol, 
-    @pathname, 
-    @host, 
-    @device_type, 
-    @device_family, 
-    @browser, 
-    @browser_major_version, 
-    @browser_minor_version, 
-    @os, 
-    @os_major_version, 
-    @os_minor_version, 
-    @country_code,
-    @referer_host,
-    @headless,
-    @bot,
-    @width,
-    @session_length,
-    @pageviews,
-    @load_time,
-    @lang,
-    @edge_location,
-    @session,
-    @is_new
-)`);
+        id, 
+        date, 
+        ts, 
+        ip, 
+        event,
+        value,
+        protocol, 
+        pathname, 
+        host, 
+        device_type, 
+        device_family, 
+        browser, 
+        browser_major_version, 
+        browser_minor_version, 
+        os, 
+        os_major_version, 
+        os_minor_version, 
+        country_code,
+        referer_host,
+        headless,
+        bot,
+        width,
+        session_length,
+        pageviews,
+        load_time,
+        lang,
+        edge_location,
+        session,
+        is_new
+    ) VALUES (
+        @unique_request_id, 
+        @iso_date,
+        @timestamp,
+        @remote_ip,
+        @event,
+        @value,
+        @protocol, 
+        @pathname, 
+        @host, 
+        @device_type, 
+        @device_family, 
+        @browser, 
+        @browser_major_version, 
+        @browser_minor_version, 
+        @os, 
+        @os_major_version, 
+        @os_minor_version, 
+        @country_code,
+        @referer_host,
+        @headless,
+        @bot,
+        @width,
+        @session_length,
+        @pageviews,
+        @load_time,
+        @lang,
+        @edge_location,
+        @session,
+        @is_new
+    )`);
 
     // Insert one or many function
     const insertMany = db.transaction(rows => {
@@ -334,7 +345,7 @@ function ready() {
     let D = new Date(), yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
 
-    if (drop) getLogs(D, () => getLogs(yesterday, () => getLogs('08-01-21', () => getLogs('07-31-21'))));
+    if (drop) getLogs(D, () => getLogs(yesterday, () => getLogs('08-03-21', () => getLogs('08-02-21', () => getLogs('08-01-21', () => getLogs('07-31-21'))))));
     else getLogs(D, () => getLogs(yesterday, () => {
 
         setTimeout(() => {
