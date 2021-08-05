@@ -2,6 +2,7 @@ import { createDbWorker } from "sql.js-httpvfs";
 
 const workerUrl = new URL("sql.js-httpvfs/dist/sqlite.worker.js", import.meta.url);
 const wasmUrl = new URL("sql.js-httpvfs/dist/sql-wasm.wasm", import.meta.url);
+let renderTime = 0;
 
 async function load() {
   let url = (location.hostname === 'localhost' ? `${ location.protocol }//${ location.host }/` : 'https://analytics.serv.rs/') + `analytics.sqlite3`;
@@ -104,6 +105,7 @@ async function load() {
     let languages = {};
     let countries = {};
     let pathnames = {};
+    let loadTimes = {};
     let pageviews = 0;
     let visitors = [];
     let browsers = {};
@@ -114,9 +116,9 @@ async function load() {
 
     // console.log(result);
 
-    function incr(o, k) {
+    function incr(o, k, v = 1) {
       if (!o[k]) o[k] = 0;
-      o[k]++;
+      o[k] += v;
     }
 
     // Construct directed graph
@@ -150,6 +152,9 @@ async function load() {
       // Pathnames
       incr(pathnames, item.pathname);
 
+      // Load times
+      incr(loadTimes, item.pathname, item.load_time);
+
       // Nodes, sessions, and Links
       // @ts-ignore
       if (!nodes.includes(item.pathname)) nodes.push(item.pathname);
@@ -173,6 +178,9 @@ async function load() {
       if (!visitors.includes(item.ip)) visitors.push(item.ip);
       pageviews++;
     });
+
+    // Todo: compute load times
+    console.log('loadTimes', loadTimes, pathnames);
 
     // Format sankey nodes
     let nodes2 = [] as any;
@@ -443,6 +451,11 @@ async function load() {
     $('.pageviews').textContent = pageviews;
     $('.duration').textContent = avgSessionLength ? (avgSessionLength < 60 ? avgSessionLength : fmtMSS(avgSessionLength)) + 's' : '-';
     $('.bounced').textContent = (bounceRate ? (bounceRate * 100).toFixed(2) : 0) + '%';
+
+    // Render complete
+    renderTime = renderTime || window.performance.now() / 1000;
+    console.log('page rendered in', renderTime+'s');
+    // Todo: send this somewhere I can analyze
   }
 
   // Render data for the currently-selected time range
