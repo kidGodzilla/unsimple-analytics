@@ -29,6 +29,7 @@
     "node-log-dissector": "^2.0.0",
     "serve": "^12.0.0",
     "superagent": "^6.1.0",
+    "sync-via-ftp": "^0.2.18",
     "ua-parser": "^0.3.5",
     "url-parse": "^1.5.3",
     "useragent": "^2.3.0"
