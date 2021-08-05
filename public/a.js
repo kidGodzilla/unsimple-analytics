@@ -7,6 +7,10 @@
     }
 
     function pageview() {
+        event();
+    }
+
+    function event(name, value) {
         if (location.pathname === lastPathname) return;
 
         var sessionCount = 0, viewCount = 0, sessionTime = 0, isNew = 1;
@@ -30,6 +34,8 @@
         var img = document.createElement("img");
 
         var url = `https://unsimple.b-cdn.net/o.png?host=${ encodeURIComponent(host) }&referrer=${ encodeURIComponent(referrer) }&href=${ encodeURIComponent(href) }&width=${ width }&bot=${ isBot ? 1 : 0 }&headless=${ isHeadless ? 1 : 0 }&load=${ loadTime }&views=${ viewCount }&time=${ sessionTime }&lang=${ lang }&new=${ isNew }&session=${ sessionCount }&v=${ rand }`;
+        if (value) url += `&value=${ value }`;
+        if (name) url += `&event=${ name }`;
         lastPathname = location.pathname;
         img.src = url;
 
@@ -45,4 +51,6 @@
         window.addEventListener('popstate', pageview);
         pageview();
     });
+
+    window.implausible = event;
 })();
