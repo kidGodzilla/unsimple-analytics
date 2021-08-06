@@ -148,7 +148,7 @@
         <div class="col-md-6">
             <div class="card min-357">
                 <div class="card-body">
-                    <h5 class="card-title">Top Sources</h5>
+                    <h5 class="card-title">Sources</h5>
                     <small class="text-muted w-495 d-inline-block">Source</small>
                     <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
 
@@ -162,12 +162,35 @@
         <div class="col-md-6 mt-3 mt-sm-0">
             <div class="card min-357">
                 <div class="card-body">
-                    <h5 class="card-title">Top Pages</h5>
-                    <small class="text-muted w-495 d-inline-block">Page URL</small>
-                    <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
+                    <h5 class="card-title float-left" style="margin-bottom: -37px;">Pages</h5>
 
-                    <div class="mt-2 pseudotable pages">
-                        <div class="spinner-border spinme" role="status"></div>
+                    <ul class="nav nav-tabs float-right">
+                        <li class="nav-item ms-auto">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#pages">Top Pages</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#loadtimes">Load Times</a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content mt-5">
+                        <div class="tab-pane fade show active" id="pages">
+                            <small class="text-muted w-495 d-inline-block">Page URL</small>
+                            <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
+
+                            <div class="mt-2 pseudotable pages">
+                                <div class="spinner-border spinme" role="status"></div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade show" id="loadtimes">
+                            <small class="text-muted w-495 d-inline-block">Page URL</small>
+                            <small class="text-muted w-495 d-inline-block text-right">Avg. Load Time</small>
+
+                            <div class="mt-2 pseudotable loadtimes">
+                                <div class="spinner-border spinme" role="status"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

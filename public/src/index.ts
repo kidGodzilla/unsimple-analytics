@@ -87,6 +87,7 @@ async function load() {
     // console.log('result', result);
 
     // Cleanup Loading Spinners / previous output
+    $('.loadtimes').innerHTML = '';
     $('.languages').innerHTML = '';
     $('.browsers').innerHTML = '';
     $('.devices').innerHTML = '';
@@ -153,7 +154,7 @@ async function load() {
       incr(pathnames, item.pathname);
 
       // Load times
-      incr(loadTimes, item.pathname, item.load_time);
+      incr(loadTimes, item.pathname, Math.max(item.load_time, 0));
 
       // Nodes, sessions, and Links
       // @ts-ignore
@@ -180,7 +181,12 @@ async function load() {
     });
 
     // Todo: compute load times
-    console.log('loadTimes', loadTimes, pathnames);
+    let computedLoadTimes = {};
+    for (let k in loadTimes) {
+      let total = loadTimes[k];
+      computedLoadTimes[k] = total / pathnames[k];
+    }
+    // console.log('loadTimes', loadTimes, pathnames, computedLoadTimes);
 
     // Format sankey nodes
     let nodes2 = [] as any;
@@ -310,11 +316,13 @@ async function load() {
     // console.log(map, data, edges, referrers, browsers, pathnames, os, types, languages, pageviews, visitors.length);
 
     $('.referrers').innerHTML = tableFragment(referrers, s => s ? `<img src="https://logo.clearbit.com/${ s }" onerror="this.onerror=null; this.src='default.png';">&nbsp;<a class="d-inline-block text-truncate" href="http://${ s }" target="_blank">${ s }</a>` : 'Direct / None');
+    $('.loadtimes').innerHTML = tableFragment(computedLoadTimes, s => `<a class="d-inline-block text-truncate" href="http://${ host }${ s }" target="_blank">${ s }</a>`, s => s.toFixed(2)+'s');
     $('.pages').innerHTML = tableFragment(pathnames, s => `<a class="d-inline-block text-truncate" href="http://${ host }${ s }" target="_blank">${ s }</a>`);
     $('.devices').innerHTML = tableFragment(types, s => s.charAt(0).toUpperCase() + s.slice(1));
     $('.languages').innerHTML = tableFragment(languages, s => s ? s : 'Unknown');
     $('.browsers').innerHTML = tableFragment(browsers);
     $('.os').innerHTML = tableFragment(os);
+
 
     function renderCharts() {
       $('#sankey_multiple').innerHTML = '';
