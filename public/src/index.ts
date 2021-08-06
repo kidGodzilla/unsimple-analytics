@@ -6,7 +6,7 @@ let renderTime = 0;
 
 async function load() {
   let url = (location.hostname === 'localhost' ? `${ location.protocol }//${ location.host }/` : 'https://analytics.serv.rs/') + `analytics.sqlite3`;
-  if (location.hostname !== 'localhost') url = 'https://implausible.b-cdn.net/analytics.sqlite3'; // Does not seem to support range requests (`Accept-Ranges: bytes` header missing)
+  // if (location.hostname !== 'localhost') url = 'https://implausible.b-cdn.net/analytics.sqlite3'; // Does not seem to support range requests (`Accept-Ranges: bytes` header missing)
   // console.log('url', url);
 
   const worker = await createDbWorker(
