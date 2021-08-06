@@ -94,6 +94,7 @@ async function load() {
     $('#svgMap').innerHTML = '';
     $('#visits').innerHTML = '';
     $('.pages').innerHTML = '';
+    $('.new').innerHTML = '';
     $('.os').innerHTML = '';
 
     // Debug / Demo output
@@ -110,6 +111,7 @@ async function load() {
     let pageviews = 0;
     let visitors = [];
     let browsers = {};
+    let isNew = {};
     let edges = {};
     let types = {};
     let map = {};
@@ -172,6 +174,9 @@ async function load() {
 
       // Load times
       incr(loadTimes, item.pathname, Math.max(item.load_time, 0));
+
+      // New vs. returning
+      incr(isNew, item.is_new);
 
       // Nodes, sessions, and Links
       // @ts-ignore
@@ -343,6 +348,7 @@ async function load() {
     $('.pages').innerHTML = tableFragment(pathnames, s => `<a class="d-inline-block text-truncate" href="http://${ host }${ s }" target="_blank">${ s }</a>`);
     $('.devices').innerHTML = tableFragment(types, s => `<span class="cursor-help" data-bs-toggle="tooltip" data-bs-placement="top" title="${ typeTooltips[s] }">${ s.charAt(0).toUpperCase() + s.slice(1) }</span>`);
     $('.languages').innerHTML = tableFragment(languages, s => s ? s : 'Unknown');
+    $('.new').innerHTML = tableFragment(isNew, s => parseInt(s) ? 'New' : 'Returning');
     $('.browsers').innerHTML = tableFragment(browsers);
     $('.os').innerHTML = tableFragment(os);
 
