@@ -122,6 +122,13 @@ async function load() {
       o[k] += v;
     }
 
+    function determineType(w) {
+      if (w <= 600) return 'mobile';
+      else if (w <= 992) return 'tablet';
+      else if (w <= 1440) return 'laptop';
+      else return 'desktop';
+    }
+
     // Construct directed graph
     let nodes = [], usedNodes = [] as any, sessions = {}, links = {}, idLookup = {} as any, linkArray = [] as any, linkRows = [] as any;
 
@@ -136,7 +143,8 @@ async function load() {
       incr(referrers, item.referer_host);
 
       // Device type
-      incr(types, item.device_type);
+      // incr(types, item.device_type);
+      incr(types, determineType(item.width));
 
       // OS
       incr(os, item.os);
@@ -314,15 +322,22 @@ async function load() {
     }
 
     // console.log(map, data, edges, referrers, browsers, pathnames, os, types, languages, pageviews, visitors.length);
+    let typeTooltips = { mobile: 'below 600px', tablet: '600px to 992px', laptop: '992px to 1440px', desktop: 'above 1440px' };
 
     $('.referrers').innerHTML = tableFragment(referrers, s => s ? `<img src="https://logo.clearbit.com/${ s }" onerror="this.onerror=null; this.src='default.png';">&nbsp;<a class="d-inline-block text-truncate" href="http://${ s }" target="_blank">${ s }</a>` : 'Direct / None');
     $('.loadtimes').innerHTML = tableFragment(computedLoadTimes, s => `<a class="d-inline-block text-truncate" href="http://${ host }${ s }" target="_blank">${ s }</a>`, s => s.toFixed(2)+'s');
     $('.pages').innerHTML = tableFragment(pathnames, s => `<a class="d-inline-block text-truncate" href="http://${ host }${ s }" target="_blank">${ s }</a>`);
-    $('.devices').innerHTML = tableFragment(types, s => s.charAt(0).toUpperCase() + s.slice(1));
+    $('.devices').innerHTML = tableFragment(types, s => `<span class="cursor-help" data-bs-toggle="tooltip" data-bs-placement="top" title="${ typeTooltips[s] }">${ s.charAt(0).toUpperCase() + s.slice(1) }</span>`);
     $('.languages').innerHTML = tableFragment(languages, s => s ? s : 'Unknown');
     $('.browsers').innerHTML = tableFragment(browsers);
     $('.os').innerHTML = tableFragment(os);
 
+    // Attach tooltips
+    let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+      // @ts-ignore
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    });
 
     function renderCharts() {
       $('#sankey_multiple').innerHTML = '';
