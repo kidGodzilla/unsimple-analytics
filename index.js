@@ -236,6 +236,7 @@ function ready() {
         date TEXT,
         ts INTEGER,
         ip TEXT,
+        url TEXT,
         event TEXT,
         value TEXT,
         protocol TEXT,
@@ -275,6 +276,7 @@ function ready() {
         date, 
         ts, 
         ip, 
+        url,
         event,
         value,
         protocol, 
@@ -305,6 +307,7 @@ function ready() {
         @iso_date,
         @timestamp,
         @remote_ip,
+        @url,
         @event,
         @value,
         @protocol, 
@@ -345,7 +348,7 @@ function ready() {
     let D = new Date(), yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
 
-    if (drop) getLogs(D, () => getLogs(yesterday, () => getLogs('08-03-21', () => getLogs('08-02-21', () => getLogs('08-01-21', () => getLogs('07-31-21'))))));
+    if (drop) getLogs(D, () => getLogs(yesterday, () => getLogs('08-04-21', () => getLogs('08-03-21', () => getLogs('08-02-21', () => getLogs('08-01-21', () => getLogs('07-31-21')))))));
     else getLogs(D, () => getLogs(yesterday, () => {
 
         setTimeout(() => {
