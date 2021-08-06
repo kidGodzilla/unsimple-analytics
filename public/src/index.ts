@@ -94,6 +94,7 @@ async function load() {
     $('#svgMap').innerHTML = '';
     $('#visits').innerHTML = '';
     $('.pages').innerHTML = '';
+    $('.bots').innerHTML = '';
     $('.new').innerHTML = '';
     $('.os').innerHTML = '';
 
@@ -111,6 +112,7 @@ async function load() {
     let pageviews = 0;
     let visitors = [];
     let browsers = {};
+    let botUsers = {};
     let isNew = {};
     let edges = {};
     let types = {};
@@ -178,6 +180,10 @@ async function load() {
       // New vs. returning
       incr(isNew, item.is_new);
 
+      // Bot users, headless users
+      incr(botUsers, item.headless ? 'Headless Browsers' : 'Normal Users');
+      incr(botUsers, item.bot ? 'Bots' : 'Normal Users');
+
       // Nodes, sessions, and Links
       // @ts-ignore
       if (!nodes.includes(item.pathname)) nodes.push(item.pathname);
@@ -201,6 +207,8 @@ async function load() {
       if (!visitors.includes(item.ip)) visitors.push(item.ip);
       pageviews++;
     });
+
+    console.log('botUsers', botUsers);
 
     // Todo: compute load times
     let computedLoadTimes = {};
@@ -350,6 +358,7 @@ async function load() {
     $('.languages').innerHTML = tableFragment(languages, s => s ? s : 'Unknown');
     $('.new').innerHTML = tableFragment(isNew, s => parseInt(s) ? 'New' : 'Returning');
     $('.browsers').innerHTML = tableFragment(browsers);
+    $('.bots').innerHTML = tableFragment(botUsers);
     $('.os').innerHTML = tableFragment(os);
 
     // Attach tooltips
