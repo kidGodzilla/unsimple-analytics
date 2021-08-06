@@ -182,8 +182,7 @@ async function load() {
       incr(isNew, item.is_new);
 
       // Bot users, headless users
-      incr(botUsers, item.headless ? 'Headless Browsers' : 'Normal Users');
-      incr(botUsers, item.bot ? 'Bots' : 'Normal Users');
+      incr(botUsers, item.headless ? 'Headless Browsers' : (item.bot ? 'Bots' : 'Normal Users'));
 
       // Nodes, sessions, and Links
       // @ts-ignore
