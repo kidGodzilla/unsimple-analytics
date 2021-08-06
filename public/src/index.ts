@@ -397,7 +397,8 @@ async function load() {
         labels: ['Visits'],
         lineWidth: 4,
         pointSize: 5,
-        fillOpacity: 0.2,
+        fillOpacity: 0.16,
+        lineColors: ['#2847b7', '#3459E6', '#1a2c72']
         // smooth: false
       });
 
