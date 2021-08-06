@@ -330,11 +330,16 @@ async function load() {
       }
     }
 
+    function humanSeconds(n) {
+      if (n < 1) return Math.round(n * 1000)+'ms';
+      else return n.toFixed(2)+'s';
+    }
+
     // console.log(map, data, edges, referrers, browsers, pathnames, os, types, languages, pageviews, visitors.length);
     let typeTooltips = { mobile: 'below 600px', tablet: '600px to 992px', laptop: '992px to 1440px', desktop: 'above 1440px' };
 
     $('.referrers').innerHTML = tableFragment(referrers, s => s ? `<img src="https://logo.clearbit.com/${ s }" onerror="this.onerror=null; this.src='default.png';">&nbsp;<a class="d-inline-block text-truncate" href="http://${ s }" target="_blank">${ s }</a>` : 'Direct / None');
-    $('.loadtimes').innerHTML = tableFragment(computedLoadTimes, s => `<a class="d-inline-block text-truncate" href="http://${ host }${ s }" target="_blank">${ s }</a>`, s => s.toFixed(2)+'s');
+    $('.loadtimes').innerHTML = tableFragment(computedLoadTimes, s => `<a class="d-inline-block text-truncate" href="http://${ host }${ s }" target="_blank">${ s }</a>`, s => humanSeconds(s));
     $('.pages').innerHTML = tableFragment(pathnames, s => `<a class="d-inline-block text-truncate" href="http://${ host }${ s }" target="_blank">${ s }</a>`);
     $('.devices').innerHTML = tableFragment(types, s => `<span class="cursor-help" data-bs-toggle="tooltip" data-bs-placement="top" title="${ typeTooltips[s] }">${ s.charAt(0).toUpperCase() + s.slice(1) }</span>`);
     $('.languages').innerHTML = tableFragment(languages, s => s ? s : 'Unknown');
