@@ -102,6 +102,7 @@ async function load() {
     $('div pre').textContent = JSON.stringify(result, null, 2);
 
     // Aggregate results
+    let utm = { source: { None: 0 }, medium: { None: 0 }, content: { None: 0 }, campaign: { None: 0 }, term: { None: 0 } };
     let maxSessionLength = {};
     let pageVisits = {};
     let referrers = {};
@@ -184,6 +185,24 @@ async function load() {
       // Bot users, headless users
       incr(botUsers, item.headless ? 'Headless Browsers' : (item.bot ? 'Bots' : 'Normal Users'));
 
+      // UTM codes
+      function getUTM(namespace = 'source', url = '') {
+        let value = (new URLSearchParams(new URL(url.toLowerCase()).search)).get('utm_'+namespace);
+
+        if (value) {
+          // @ts-ignore
+          if (!utm[namespace][value]) utm[namespace][value] = 0;
+          utm[namespace][value]++;
+        } else {
+          utm[namespace]['None']++;
+        }
+      }
+      getUTM('source', item.url);
+      getUTM('medium', item.url);
+      getUTM('content', item.url);
+      getUTM('campaign', item.url);
+      getUTM('term', item.url);
+
       // Nodes, sessions, and Links
       // @ts-ignore
       if (!nodes.includes(item.pathname)) nodes.push(item.pathname);
@@ -208,7 +227,8 @@ async function load() {
       pageviews++;
     });
 
-    console.log('botUsers', botUsers);
+    // console.log('botUsers', botUsers);
+    // console.log('utm', utm);
 
     // Todo: compute load times
     let computedLoadTimes = {};
@@ -357,9 +377,13 @@ async function load() {
     $('.pages').innerHTML = tableFragment(pathnames, s => `<a class="d-inline-block text-truncate" href="http://${ host }${ s }" target="_blank">${ s }</a>`);
     $('.languages').innerHTML = tableFragment(languages, s => s ? s : 'Unknown');
     $('.new').innerHTML = tableFragment(isNew, s => parseInt(s) ? 'New' : 'Returning');
+    $('.campaign').innerHTML = tableFragment(utm.campaign);
     $('.browsers').innerHTML = tableFragment(browsers);
+    $('.medium').innerHTML = tableFragment(utm.medium);
+    $('.source').innerHTML = tableFragment(utm.source);
     $('.bots').innerHTML = tableFragment(botUsers);
     $('.os').innerHTML = tableFragment(os);
+
 
     // Attach tooltips
     let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));

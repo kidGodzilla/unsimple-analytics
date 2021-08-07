@@ -42,6 +42,7 @@
         }
         @media screen and (max-width: 768px) {
             .nav-pills { margin-top: -8px }
+            .nav-tabs .nav-link { padding: .5rem .5rem }
         }
     </style>
 </head>
@@ -149,13 +150,62 @@
         <div class="col-md-6">
             <div class="card min-357">
                 <div class="card-body">
-                    <h5 class="card-title">Sources</h5>
-                    <small class="text-muted w-495 d-inline-block">Source</small>
-                    <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
+                    <h5 class="card-title float-left" style="margin-bottom: -37px;">Sources</h5>
 
-                    <div class="mt-2 pseudotable referrers">
-                        <div class="spinner-border spinme" role="status"></div>
+                    <ul class="nav nav-tabs float-right">
+                        <li class="nav-item ms-auto">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#referrers"><span class="d-none d-sm-inline">Referrers</span><span class="d-inline d-sm-none">All</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#medium">Medium</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#source">Source</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#campaign">Campaign</a>
+                        </li>
+                    </ul>
+
+
+                    <div class="tab-content mt-5">
+                        <div class="tab-pane fade show active" id="referrers">
+                            <small class="text-muted w-495 d-inline-block">Source</small>
+                            <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
+
+                            <div class="mt-2 pseudotable referrers">
+                                <div class="spinner-border spinme" role="status"></div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade show" id="medium">
+                            <small class="text-muted w-495 d-inline-block">Source</small>
+                            <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
+
+                            <div class="mt-2 pseudotable medium">
+                                <div class="spinner-border spinme" role="status"></div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade show" id="source">
+                            <small class="text-muted w-495 d-inline-block">Source</small>
+                            <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
+
+                            <div class="mt-2 pseudotable source">
+                                <div class="spinner-border spinme" role="status"></div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade show" id="campaign">
+                            <small class="text-muted w-495 d-inline-block">Source</small>
+                            <small class="text-muted w-495 d-inline-block text-right">Visitors</small>
+
+                            <div class="mt-2 pseudotable campaign">
+                                <div class="spinner-border spinme" role="status"></div>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
             </div>
         </div>
