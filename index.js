@@ -345,11 +345,12 @@ function ready() {
     });
 
     // Fetch today's logs from Bunny CDN
-    let D = new Date(), yesterday = new Date();
+    let D = new Date(), yesterday = new Date(), yesterday2 = new Date();
+    yesterday2.setDate(yesterday2.getDate() - 2);
     yesterday.setDate(yesterday.getDate() - 1);
 
     if (drop) getLogs(D, () => getLogs(yesterday, () => getLogs('08-04-21', () => getLogs('08-03-21', () => getLogs('08-02-21', () => getLogs('08-01-21', () => getLogs('07-31-21')))))));
-    else getLogs(D, () => getLogs(yesterday, () => {
+    else getLogs(D, () => getLogs(yesterday, () => getLogs(yesterday2, () => {
 
         setTimeout(() => {
 
@@ -358,7 +359,7 @@ function ready() {
             });
 
         }, 1234);
-    }));
+    })));
 }
 
 
