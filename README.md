@@ -64,3 +64,4 @@ That's it!
 ## Todo
 
 - [ ] Setup a GitHub Action to run the batch processing job (instead of doing it on a server) for a "more static, more serverless" experience.
+- [ ] Consider implementing High Water Marks for larger projects
