@@ -345,21 +345,40 @@ function ready() {
     });
 
     // Fetch today's logs from Bunny CDN
-    let D = new Date(), yesterday = new Date(), yesterday2 = new Date();
-    yesterday2.setDate(yesterday2.getDate() - 2);
-    yesterday.setDate(yesterday.getDate() - 1);
+    // let D = new Date(), yesterday = new Date(), yesterday2 = new Date();
+    // yesterday2.setDate(yesterday2.getDate() - 2);
+    // yesterday.setDate(yesterday.getDate() - 1);
 
-    if (drop) getLogs(D, () => getLogs(yesterday, () => getLogs('08-04-21', () => getLogs('08-03-21', () => getLogs('08-02-21', () => getLogs('08-01-21', () => getLogs('07-31-21')))))));
-    else getLogs(D, () => getLogs(yesterday, () => getLogs(yesterday2, () => {
+    // if (drop) getLogs(D, () => getLogs(yesterday, () => getLogs('08-04-21', () => getLogs('08-03-21', () => getLogs('08-02-21', () => getLogs('08-01-21', () => getLogs('07-31-21')))))));
+    // else getLogs(D, () => getLogs(yesterday, () => getLogs(yesterday2, () => {
 
-        setTimeout(() => {
+    //     setTimeout(() => {
 
-            persist(() => {
-                try { destroy() } catch(e){ console.log(e) } // process.exit()
-            });
+    //         persist(() => {
+    //             try { destroy() } catch(e){ console.log(e) } // process.exit()
+    //         });
 
-        }, 1234);
-    })));
+    //     }, 1234);
+    // })));
+
+
+    // Fetch a whole 30 days of logs because apparently I'm too stupid to figure out why it fails
+    for (var i = 0; i < 31; i++) {
+        let thisD = new Date();
+        if (i) thisD = thisD.setDate(thisD.getDate() - i);
+
+        getLogs(new Date(thisD), () => {
+
+            setTimeout(() => {
+
+                persist(() => {
+                    try { destroy() } catch(e){ console.log(e) } // process.exit()
+                });
+
+            }, 2345);
+
+        });
+    }
 }
 
 
