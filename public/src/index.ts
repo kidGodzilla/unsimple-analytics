@@ -557,7 +557,7 @@ async function load() {
   // Build dropdown menu HTML fragment
   domains.forEach((domain, i) => {
     // @ts-ignore
-    if (!domain.includes('meetingroom365') && i < 14) fragment += `<a class="dropdown-item cp" href="?host=${ domain }">${ capitalize(domain) }</a>`;
+    if (!domain.includes('meetingroom365') && !domain.includes('localhost') && i < 14) fragment += `<a class="dropdown-item cp" href="?host=${ domain }">${ capitalize(domain) }</a>`;
   });
 
   // Render fragments
