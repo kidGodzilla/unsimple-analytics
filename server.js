@@ -14,7 +14,7 @@ let { persist, destroy } = syncViaFtp('analytics.sqlite3', {
     interval: false,
     debug: true,
     ready: () => {
-        schedule.scheduleJob('36 * * * *', () => ready(persist, destroy));
+        schedule.scheduleJob('23 * * * *', () => ready(persist, destroy));
         setTimeout(() => ready(persist, destroy), 7777);
     }
 });
