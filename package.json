@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "deploy": "git push dokku main:master",
-    "start": "serve public -l 5000",
+    "serve": "serve public -l 5000",
+    "start": "node server",
     "dev": "serve public -l 5001",
     "build": "node ."
   },
@@ -23,10 +24,11 @@
   "dependencies": {
     "better-sqlite3": "^7.4.3",
     "dotenv": "^10.0.0",
-    "express": "^4.17.1",
+    "express": "^4.17.2",
     "fs": "^0.0.1-security",
     "mobile-detect": "^1.4.5",
     "node-log-dissector": "^2.0.0",
+    "node-schedule": "^2.1.0",
     "serve": "^12.0.0",
     "superagent": "^6.1.0",
     "sync-via-ftp": "^0.2.18",
