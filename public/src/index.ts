@@ -81,12 +81,13 @@ async function load() {
     $('h5.name').textContent = capitalize(host);
 
     let statement = `SELECT * FROM visits WHERE host = '${ host }' AND date BETWEEN '${ isoDate(start) }' AND '${ isoDate(end) }'`;
+    // let statement = `SELECT * FROM visits WHERE host = '${ host }'`;
     let hourly = Math.floor(start / 10000) === Math.floor(end / 10000);
     // console.log(statement, hourly, start, end);
 
     let result = await worker.db.query(statement);
     result = result.sort((a, b) => a.ts > b.ts && 1 || -1);
-    // console.log('result', result);
+    console.log('query result', result);
 
     // Cleanup Loading Spinners / previous output
     $('.loadtimes').innerHTML = '';
