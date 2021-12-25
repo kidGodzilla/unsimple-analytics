@@ -49,7 +49,7 @@ This project runs on [Bunny CDN](https://bunny.net/) and Heroku or Herokuish (Do
 ### Deploying
 
 1. Modify `public/a.js` line `27` to point to the collector you just created (`o.png`).
-2. Optional: modify line 72 of `public/src/index.ts` to your own URL & run `webpack` to rebuild.
+2. Optional: modify line 72 of `public/src/index.ts` to your own URL & run `webpack` to rebuild (from the `/public` directory).
 3. Update your Environment Variables based on the template `env` to include your Bunny CDN pull zone ID and API key. This is required for `npm run build` to run, and parse your log files.
 4. Deploy the project
 5. Include the script `a.js` on your website somewhere (it's already included in the project you deploy)
