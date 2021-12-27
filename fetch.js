@@ -86,6 +86,7 @@ function ready(persist, destroy) {
                     let iso_date = d.toISOString().slice(0,10);
                     out.iso_date = iso_date;
                     // console.log(iso_date);
+                    out.hour = d.getHours();
 
 
                 } else if (format[i] === 'user_agent') {
@@ -119,9 +120,6 @@ function ready(persist, destroy) {
                     parsed = new Url(part, true);
                     // console.log(part, '->', parsed.protocol, parsed.host, parsed.pathname);
 
-                    // console.log(parsed);
-                    // parsed.query.url
-
                     out.protocol = parsed.protocol;
                     out.pathname = parsed.pathname;
                     out.host = parsed.host;
@@ -133,6 +131,11 @@ function ready(persist, destroy) {
                         out.pathname = parsed.pathname;
                         out.host = parsed.host;
                     }
+
+                    // Todo: I think this works
+                    // console.log('parsed url', parsed.query);
+                    let { utm_source, utm_medium, utm_content, utm_campaign, utm_term } = parsed.query;
+                    out = Object.assign(out, { utm_source, utm_medium, utm_content, utm_campaign, utm_term });
 
                     if (out.host.indexOf('www.') === 0) out.host = out.host.replace('www.', '');
                 }
@@ -184,8 +187,10 @@ function ready(persist, destroy) {
         if (process.env.PULL_ZONE_ID && process.env.ACCESS_KEY && iso_date) {
             console.log(`Downloading (${ iso_date }) log data from Bunny CDN`);
             let rand = (Math.random() + 1).toString(36).substring(5);
+            let url = `https://logging.bunnycdn.com/${ iso_date }/${ process.env.PULL_ZONE_ID }.log?v=${ rand }`;
+            // console.log('Fetching:', url);
 
-            request.get(`https://logging.bunnycdn.com/${ iso_date }/${ process.env.PULL_ZONE_ID }.log?v=${ rand }`)
+            request.get(url)
                 .set('AccessKey', process.env.ACCESS_KEY)
                 .set('accept', 'json')
                 .end((err, res) => {
@@ -236,6 +241,7 @@ function ready(persist, destroy) {
         id TEXT PRIMARY KEY,
         date TEXT,
         ts INTEGER,
+        hour INTEGER,
         ip TEXT,
         url TEXT,
         event TEXT,
@@ -262,10 +268,77 @@ function ready(persist, destroy) {
         lang TEXT,
         edge_location TEXT,
         session REAL,
-        is_new REAL
+        is_new REAL,
+        utm_source TEXT,
+        utm_medium TEXT,
+        utm_content TEXT,
+        utm_campaign TEXT,
+        utm_term TEXT
     )`);
 
     stmt.run();
+
+    // Add columns
+    function addColumn(name, type) {
+        try {
+            let stmt = db.prepare(`ALTER TABLE visits ADD COLUMN ${ name } ${ type };`);
+            stmt.run();
+        } catch(e) {
+            console.log(`column ${ name } already exists, skipping`);
+        }
+    }
+
+    addColumn('hour', 'INTEGER');
+    addColumn('utm_source', 'TEXT');
+    addColumn('utm_medium', 'TEXT');
+    addColumn('utm_content', 'TEXT');
+    addColumn('utm_campaign', 'TEXT');
+    addColumn('utm_term', 'TEXT');
+
+
+    // Add indexes
+    try {
+        // stmt = db.prepare(`CREATE INDEX idx_pathname ON visits (pathname);`);
+        // stmt.run();
+    } catch(e) {
+        console.log('index already exists, skipping');
+    }
+
+    function addIndex(column) {
+        try {
+            let stmt = db.prepare(`CREATE INDEX idx_${ column } ON visits (${ column });`);
+            stmt.run();
+        } catch(e) {
+            console.log(`index idx_${ column } already exists, skipping`);
+        }
+    }
+
+    addIndex('date');
+    addIndex('ts');
+    addIndex('hour');
+    addIndex('event');
+    addIndex('value');
+    addIndex('pathname');
+    addIndex('host');
+    addIndex('device_type');
+    // addIndex('device_family');
+    addIndex('browser');
+    addIndex('os');
+    addIndex('country_code');
+    addIndex('referer_host');
+    addIndex('headless');
+    addIndex('bot');
+    // addIndex('width');
+    addIndex('session_length');
+    addIndex('pageviews');
+    addIndex('load_time');
+    addIndex('lang');
+    addIndex('is_new');
+    addIndex('utm_source');
+    addIndex('utm_medium');
+    addIndex('utm_content');
+    addIndex('utm_campaign');
+    addIndex('utm_term');
 
     // Vacuum again
     stmt = db.prepare(`vacuum;`);
@@ -276,6 +349,7 @@ function ready(persist, destroy) {
         id, 
         date, 
         ts, 
+        hour,
         ip, 
         url,
         event,
@@ -302,11 +376,17 @@ function ready(persist, destroy) {
         lang,
         edge_location,
         session,
-        is_new
+        is_new,
+        utm_source,
+        utm_medium,
+        utm_content,
+        utm_campaign,
+        utm_term
     ) VALUES (
         @unique_request_id, 
         @iso_date,
         @timestamp,
+        @hour,
         @remote_ip,
         @url,
         @event,
@@ -333,7 +413,12 @@ function ready(persist, destroy) {
         @lang,
         @edge_location,
         @session,
-        @is_new
+        @is_new,
+        @utm_source,
+        @utm_medium,
+        @utm_content,
+        @utm_campaign,
+        @utm_term
     )`);
 
     // Insert one or many function
@@ -345,8 +430,8 @@ function ready(persist, destroy) {
         }
     });
 
-    // Fetch a whole 30 days of logs because apparently I'm too stupid to figure out why it fails
-    for (var i = 0; i < 31; i++) {
+    // Fetch 5 days of logs
+    for (var i = 0; i < 5; i++) {
         let thisD = new Date();
         if (i) thisD = thisD.setDate(thisD.getDate() - i);
 
@@ -357,7 +442,8 @@ function ready(persist, destroy) {
             _persistTimer = setTimeout(() => {
 
                 persist(() => {
-                    try { destroy() } catch(e){ console.log(e) } // process.exit()
+                    // try { destroy() } catch(e){ console.log(e) } // process.exit()
+                    console.log('Task Completed');
                 });
 
             }, 2345 + (i * 50));
