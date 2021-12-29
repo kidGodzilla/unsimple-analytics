@@ -18,7 +18,7 @@ async function load() {
         config: {
           serverMode: "full",
           url: url,
-          requestChunkSize: 1024
+          requestChunkSize: (1024 * 32)
         }
       }
     ],

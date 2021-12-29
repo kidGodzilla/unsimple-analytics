@@ -231,7 +231,7 @@ function ready(persist, destroy) {
     stmt = db.prepare(`pragma journal_mode = delete;`);
     stmt.run();
 
-    stmt = db.prepare(`pragma page_size = 1024;`);
+    stmt = db.prepare(`pragma page_size = 32768;`);
     stmt.run();
 
     stmt = db.prepare(`vacuum;`);
