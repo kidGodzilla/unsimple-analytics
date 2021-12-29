@@ -307,6 +307,7 @@ function ready(persist, destroy) {
         }
     }
 
+    addIndex('ip');
     addIndex('date');
     addIndex('ts');
     addIndex('hour');
