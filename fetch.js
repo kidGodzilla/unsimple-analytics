@@ -71,6 +71,7 @@ function ready(persist, destroy) {
                 if (parsed.query.time) out.session_length = parseFloat(parsed.query.time);
                 if (parsed.query.views) out.pageviews = parseInt(parsed.query.views);
                 if (parsed.query.load) out.load_time = parseFloat(parsed.query.load);
+                if (out.load_time < 0) out.load_time = 0;
 
                 parts[6] = parsed.query.referrer || '';
             }
@@ -297,13 +298,6 @@ function ready(persist, destroy) {
 
 
     // Add indexes
-    try {
-        // stmt = db.prepare(`CREATE INDEX idx_pathname ON visits (pathname);`);
-        // stmt.run();
-    } catch(e) {
-        console.log('index already exists, skipping');
-    }
-
     function addIndex(column) {
         try {
             let stmt = db.prepare(`CREATE INDEX idx_${ column } ON visits (${ column });`);
