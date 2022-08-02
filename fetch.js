@@ -195,8 +195,10 @@ function ready(persist, destroy) {
                 .set('AccessKey', process.env.ACCESS_KEY)
                 .set('accept', 'json')
                 .end((err, res) => {
-                    console.log(`Parsing ${ iso_date } logs & Updating Database`);
-                    parseLogs(res.text);
+                    if (res) {
+                        console.log(`Parsing ${ iso_date } logs & Updating Database`);
+                        parseLogs(res.text);
+                    }
 
                     if (callback && typeof callback === 'function') callback();
                 });
